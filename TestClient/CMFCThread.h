@@ -1,3 +1,5 @@
-#pragma once
+﻿#pragma once
 
-unsigned __stdcall CMFCThread(void* arg);
+#include <afxwin.h>
+
+CWinThread* StartMFCThread();

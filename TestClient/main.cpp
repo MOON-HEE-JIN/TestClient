@@ -1,4 +1,9 @@
+﻿#include <afxwin.h>
+
 #include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
 #include <process.h>
 
 #include "CWinAPIThread.h"
@@ -6,27 +11,41 @@
 
 int wmain()
 {
+    HINSTANCE hInst = ::GetModuleHandle(nullptr);
+
+    if (!AfxWinInit(hInst, nullptr, ::GetCommandLine(), SW_SHOW))
+        return 1;
+
     unsigned int winApiThreadId = 0;
-    unsigned int mfcThreadId = 0;
 
     HANDLE hWinApiThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(nullptr, 0, CWinAPIThread, nullptr, 0, &winApiThreadId));
+        _beginthreadex(nullptr, 0, CWinAPIThread, nullptr, 0, &winApiThreadId)
+        );
 
-    HANDLE hMfcThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(nullptr, 0, CMFCThread, nullptr, 0, &mfcThreadId));
+    CWinThread* pMfcThread = StartMFCThread();
 
-    if (!hWinApiThread || !hMfcThread)
+    if (!hWinApiThread || !pMfcThread)
     {
-        if (hWinApiThread) CloseHandle(hWinApiThread);
-        if (hMfcThread) CloseHandle(hMfcThread);
+        if (hWinApiThread)
+            CloseHandle(hWinApiThread);
+
+        if (pMfcThread)
+            delete pMfcThread;
+
         return 1;
     }
 
-    HANDLE handles[2] = { hWinApiThread, hMfcThread };
+    HANDLE handles[2] =
+    {
+        hWinApiThread,
+        pMfcThread->m_hThread
+    };
+
     WaitForMultipleObjects(2, handles, TRUE, INFINITE);
 
     CloseHandle(hWinApiThread);
-    CloseHandle(hMfcThread);
+
+    delete pMfcThread;
 
     return 0;
 }
