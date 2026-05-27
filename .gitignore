@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build outputs
+bin/
+obj/
+build/
+out/
+
+# IDEs
+.vs/
+.idea/
+.vscode/
+
+# Visual Studio build output
+x64/
+Debug/
+Release/
+GameServer/x64/
