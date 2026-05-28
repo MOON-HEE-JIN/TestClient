@@ -1,8 +1,9 @@
-#include "CClient.h"
+﻿#include "CClient.h"
 
 CClient::CClient(int x, int y, int size) noexcept
     : m_x(x), m_y(y), m_size(size)
 {
+    InitSocket();
 }
 
 void CClient::Move(int dx, int dy, int minX, int minY, int maxX, int maxY) noexcept
@@ -19,3 +20,8 @@ void CClient::Move(int dx, int dy, int minX, int minY, int maxX, int maxY) noexc
 int CClient::GetX() const noexcept { return m_x; }
 int CClient::GetY() const noexcept { return m_y; }
 int CClient::GetSize() const noexcept { return m_size; }
+
+void CClient::OnRecv(CPacket* pPacket)
+{
+}
+

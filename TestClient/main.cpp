@@ -1,13 +1,11 @@
 ﻿#include <afxwin.h>
 
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
 #include <process.h>
 
 #include "CWinAPIThread.h"
 #include "CMFCThread.h"
+#include "NetWork/CBaseSelectNet.h"
+#include "CClient.h"
 
 int wmain()
 {
@@ -35,6 +33,10 @@ int wmain()
         return 1;
     }
 
+	CClient client;
+    int ret = client.Connect("127.0.0.1", 7799);
+	g_SelectNet.StartServer(&g_SelectNet, &client);
+
     HANDLE handles[2] =
     {
         hWinApiThread,
@@ -42,7 +44,7 @@ int wmain()
     };
 
     WaitForMultipleObjects(2, handles, TRUE, INFINITE);
-
+	g_SelectNet.WaitStopServer();
     CloseHandle(hWinApiThread);
 
     delete pMfcThread;

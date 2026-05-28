@@ -1,6 +1,8 @@
-#pragma once
+﻿#pragma once
 
-class CClient
+#include "./NetWork/CSelectObject.h"
+
+class CClient : public CSelectObject
 {
 public:
     CClient(int x = 140, int y = 140, int size = 20) noexcept;
@@ -15,4 +17,8 @@ private:
     int m_x;
     int m_y;
     int m_size;
+
+public:
+	virtual void OnRecv(CPacket* pPacket) override;
+
 };

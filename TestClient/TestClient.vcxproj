@@ -111,6 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,13 +136,32 @@
   <ItemGroup>
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
+    <ClInclude Include="CPacketProc.h" />
+    <ClInclude Include="CUtill\CPacket.h" />
+    <ClInclude Include="CUtill\CRingBuffer.h" />
     <ClInclude Include="CWinAPIThread.h" />
+    <ClInclude Include="NetWork\CBaseSelectNet.h" />
+    <ClInclude Include="NetWork\CSelectObject.h" />
+    <ClInclude Include="NetWork\NetWorkDefine.h" />
+    <ClInclude Include="Stub\CLIENT_STUB.h" />
+    <ClInclude Include="Stub\EnumDef.h" />
+    <ClInclude Include="Stub\PacketEnumDef.h" />
+    <ClInclude Include="Stub\ProjectDefineStruct.h" />
+    <ClInclude Include="Stub\Serialization.h" />
+    <ClInclude Include="Stub\StructDef.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="CMFCThread.cpp" />
+    <ClCompile Include="CPacketProc.cpp" />
+    <ClCompile Include="CUtill\CPacket.cpp" />
+    <ClCompile Include="CUtill\CRingBuffer.cpp" />
     <ClCompile Include="CWinAPIThread.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NetWork\CBaseSelectNet.cpp" />
+    <ClCompile Include="NetWork\CSelectObject.cpp" />
+    <ClCompile Include="Stub\CLIENT_STUB.cpp" />
+    <ClCompile Include="Stub\Serialization.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

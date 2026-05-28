@@ -1,4 +1,4 @@
-#include "CWinAPIThread.h"
+﻿#include "CWinAPIThread.h"
 
 #include "CClient.h"
 

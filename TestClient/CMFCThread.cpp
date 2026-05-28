@@ -1,7 +1,5 @@
 ﻿#include "CMFCThread.h"
 
-#include <afxwin.h>
-
 namespace
 {
     constexpr int kWindowWidth = 300;

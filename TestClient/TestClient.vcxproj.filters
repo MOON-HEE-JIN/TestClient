@@ -13,16 +13,82 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\NetWork">
+      <UniqueIdentifier>{baf20f4a-120a-47eb-a560-8f3fe355db84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stub">
+      <UniqueIdentifier>{8d3a84f6-8641-43e0-9593-f49854396751}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\CUtill">
+      <UniqueIdentifier>{d67389a0-0355-4661-b436-1f293c1d6cc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
     <ClInclude Include="CWinAPIThread.h" />
+    <ClInclude Include="Stub\CLIENT_STUB.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\EnumDef.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\PacketEnumDef.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\ProjectDefineStruct.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\Serialization.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\StructDef.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="CPacketProc.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CUtill\CPacket.h">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClInclude>
+    <ClInclude Include="CUtill\CRingBuffer.h">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWork\NetWorkDefine.h">
+      <Filter>소스 파일\NetWork</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWork\CSelectObject.h">
+      <Filter>소스 파일\NetWork</Filter>
+    </ClInclude>
+    <ClInclude Include="NetWork\CBaseSelectNet.h">
+      <Filter>소스 파일\NetWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="CMFCThread.cpp" />
     <ClCompile Include="CWinAPIThread.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Stub\CLIENT_STUB.cpp">
+      <Filter>소스 파일\Stub</Filter>
+    </ClCompile>
+    <ClCompile Include="Stub\Serialization.cpp">
+      <Filter>소스 파일\Stub</Filter>
+    </ClCompile>
+    <ClCompile Include="CPacketProc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CUtill\CPacket.cpp">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClCompile>
+    <ClCompile Include="CUtill\CRingBuffer.cpp">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClCompile>
+    <ClCompile Include="NetWork\CSelectObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NetWork\CBaseSelectNet.cpp">
+      <Filter>소스 파일\NetWork</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
