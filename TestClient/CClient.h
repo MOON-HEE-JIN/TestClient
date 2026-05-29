@@ -3,11 +3,12 @@
 #include "./NetWork/CSelectObject.h"
 #include "./NetWork/NetWorkDefine.h"
 #include "./CUtill/CLockFreeQueue_SPSC.h"
+#include "GameDefines.h"
 
 class CClient : public CSelectObject
 {
 public:
-    CClient(int x = 140, int y = 140, int size = 20) noexcept;
+    CClient(int x = 140, int y = 140, int size = PLAYER_SIZE) noexcept;
 
     int GetSize() const noexcept;
 

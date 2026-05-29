@@ -16,6 +16,10 @@ CClient::CClient(int x, int y, int size) noexcept
     m_dir = st_Vector3F(0, 0, 0);
     m_eAction = EACTION_IDLE;
     m_iSpeed = 3;
+
+	CPacket render;
+	render << m_pos.X << m_pos.Z;
+	g_renderQueue.Enqueue(PROC_MSG(ERENDER_LOCAL_PLAYER_POS, render));
 }
 
 int CClient::GetSize() const noexcept { return m_size; }
@@ -50,10 +54,15 @@ void CClient::ProcessAction()
         break;
     case EACTION::EACTION_MOVE:
     {
-		m_pos += m_dir * m_iSpeed;
+		m_pos += m_dir * static_cast<float>(m_iSpeed);
+		if (m_pos.X < 0) m_pos.X = 0;
+		if (m_pos.Z < 0) m_pos.Z = 0;
+		if (m_pos.X > MAP_WIDTH) m_pos.X = static_cast<float>(MAP_WIDTH);
+		if (m_pos.Z > MAP_HEIGHT) m_pos.Z = static_cast<float>(MAP_HEIGHT);
+
         CPacket render;
 		render << m_pos.X << m_pos.Z;
-		g_renderQueue.Enqueue(PROC_MSG(0, render));
+		g_renderQueue.Enqueue(PROC_MSG(ERENDER_LOCAL_PLAYER_POS, render));
     }
         break;
     default:
