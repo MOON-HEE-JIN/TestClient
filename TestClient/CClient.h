@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "./NetWork/CSelectObject.h"
+#include "./NetWork/NetWorkDefine.h"
+#include "./CUtill/CLockFreeQueue_SPSC.h"
 
 class CClient : public CSelectObject
 {
@@ -18,7 +20,13 @@ private:
     int m_y;
     int m_size;
 
+    CLockFreeQueue_SPSC<PROC_MSG> m_queue;
+
+private:
+    void ProcessPacket();
+
 public:
-	virtual void OnRecv(CPacket* pPacket) override;
+	virtual void OnRecv(int type, CPacket* pPacket) override;
+	virtual void Update(float delta) override;
 
 };

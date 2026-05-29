@@ -22,6 +22,9 @@
     <Filter Include="소스 파일\CUtill">
       <UniqueIdentifier>{d67389a0-0355-4661-b436-1f293c1d6cc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Logic">
+      <UniqueIdentifier>{81d8e95c-219e-48fb-9924-06e103c4ee09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CClient.h" />
@@ -62,6 +65,12 @@
     </ClInclude>
     <ClInclude Include="NetWork\CBaseSelectNet.h">
       <Filter>소스 파일\NetWork</Filter>
+    </ClInclude>
+    <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDefines.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

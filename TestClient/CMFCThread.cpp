@@ -1,4 +1,8 @@
 ﻿#include "CMFCThread.h"
+#include <vector>
+
+#include "./Stub/StructDef.h"
+#include "./NetWork/CBaseSelectNet.h"
 
 namespace
 {
@@ -81,30 +85,44 @@ namespace
 
         BOOL PreTranslateMessage(MSG* pMsg) override
         {
-            if (pMsg->message == WM_KEYDOWN &&
-                pMsg->wParam == VK_RETURN &&
-                ::GetFocus() == m_input.GetSafeHwnd())
+            if (::GetFocus() == m_input.GetSafeHwnd())
             {
-                CString cmd;
-                m_input.GetWindowText(cmd);
-                cmd.Trim();
-
-                if (!cmd.IsEmpty())
+                if (pMsg->message == WM_KEYDOWN &&
+                    pMsg->wParam == VK_RETURN)
                 {
-                    CString oldLog;
-                    m_log.GetWindowText(oldLog);
+                    CString cmd;
+                    m_input.GetWindowText(cmd);
+                    cmd.Trim();
 
-                    oldLog += _T("[CHEAT] ");
-                    oldLog += cmd;
-                    oldLog += _T("\r\n");
+                    if (!cmd.IsEmpty())
+                    {
+                        CString oldLog;
+                        m_log.GetWindowText(oldLog);
 
-                    m_log.SetWindowText(oldLog);
-                    m_input.SetWindowText(_T(""));
+                        oldLog += _T("[CHEAT] ");
+                        oldLog += cmd;
+                        oldLog += _T("\r\n");
+
+                        PostCheatCommand(cmd);
+
+                        m_log.SetWindowText(oldLog);
+                        m_input.SetWindowText(_T(""));
+                    }
+
+                    return TRUE;
                 }
 
-                return TRUE;
             }
+            else
+            {
+                if (pMsg->message == WM_KEYDOWN &&
+                    pMsg->wParam == VK_F1)
+                {
+					wprintf(L"F1 pressed, setting focus to input\r\n");
 
+                    return TRUE;
+				}
+            }
             return CFrameWnd::PreTranslateMessage(pMsg);
         }
 
@@ -166,4 +184,54 @@ CWinThread* StartMFCThread()
     pThread->ResumeThread();
 
     return pThread;
+}
+
+void PostCheatCommand(const CString& cmd)
+{
+    int offset = 0;
+
+    std::vector<CString> tokens;
+    while (offset < cmd.GetLength())
+    {
+        int spacePos = cmd.Find(_T(' '), offset);
+        if (spacePos == -1)
+            spacePos = cmd.GetLength();
+        CString token = cmd.Mid(offset, spacePos - offset);
+        tokens.push_back(token);
+		offset = spacePos + 1;
+    }
+    
+    if (tokens.empty())
+		return;
+
+    const CString& command = tokens[0];
+    if (command.CompareNoCase(_T("godmode")) == 0)
+    {
+    }
+    else if (command.CompareNoCase(_T("changezone")) == 0)
+    {
+        if (tokens.size() < 3)
+            return;
+		int channel = _ttoi(tokens[1]);
+		int zoneid = _ttoi(tokens[2]);
+
+        st_CTS_ChangeZone req;
+		req.channel = channel;
+		req.zone = zoneid;
+
+		g_SelectNet.GetMainSocket()->SendPacket(req);
+    }
+    else if (command.CompareNoCase(_T("teleport")) == 0)
+    {
+		if (tokens.size() < 3)
+            return;
+		int x = 0, y = 0;
+		x = _ttoi(tokens[1]);
+		y = _ttoi(tokens[2]);
+
+        st_CTS_Teleport req;
+        req.pos = {static_cast<float>(x), 0.0f, static_cast<float>(y)};
+
+		g_SelectNet.GetMainSocket()->SendPacket(req);
+    }
 }

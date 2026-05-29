@@ -1,5 +1,9 @@
 ﻿#include "CClient.h"
 
+#include "CPacketProc.h"
+
+static CPacketProc Proc;
+
 CClient::CClient(int x, int y, int size) noexcept
     : m_x(x), m_y(y), m_size(size)
 {
@@ -21,7 +25,22 @@ int CClient::GetX() const noexcept { return m_x; }
 int CClient::GetY() const noexcept { return m_y; }
 int CClient::GetSize() const noexcept { return m_size; }
 
-void CClient::OnRecv(CPacket* pPacket)
+void CClient::ProcessPacket()
 {
+    PROC_MSG msg;
+    while (m_queue.TryDequeue(msg))
+    {
+        Proc.DO_GAME_Proc(msg.type, this, msg.packet);
+	}
+}
+
+void CClient::OnRecv(int type, CPacket* pPacket)
+{
+	m_queue.Enqueue(PROC_MSG(type, *pPacket));
+}
+
+void CClient::Update(float delta)
+{
+	ProcessPacket();
 }
 

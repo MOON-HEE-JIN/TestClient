@@ -1,13 +1,12 @@
 ﻿#pragma once
 
-
-
 #include <map>
 #include <set>
 #include <vector>
 #include <atomic>
 
 #include "CSelectObject.h"
+#include "NetWorkDefine.h"
 
 class CBaseSelectNet
 {
@@ -36,6 +35,8 @@ private:
 	virtual int WorkerRun();
 
 public:
+	// main 이 되는 소켓
+	CSelectObject* GetMainSocket() { return m_vecSelectSocket[ESOCKET_TYPE::ESOCKET_TYPE_MAIN_CLIENT]; }
 	void StartServer(CBaseSelectNet* ptr, CSelectObject* pSelectObject);
 	void WaitStopServer();
 	void ServerShutDown();

@@ -36,7 +36,10 @@ int CPacketProc::DO_GAME_LEAVEZONE(CClient* pTarget, CPacket& pReqPacket)
 
 int CPacketProc::DO_GAME_CONNECTINFO(CClient* pTarget, CPacket& pReqPacket)
 {
-	
+	st_STC_ConnectInfo res;
+	pReqPacket >> res;
+
+	printf("ID : %d\n", res.info.ID);
 	return 0;
 }
 
@@ -67,11 +70,18 @@ int CPacketProc::DO_GAME_CHANGEINGZONE(CClient* pTarget, CPacket& pReqPacket)
 
 	int ret = res.ret;
 	int type = res.type;
+
+	printf("ret : %d, type : %d\n", ret, type);
 	return 0;
 }
 
 int CPacketProc::DO_GAME_TELEPORT(CClient* pTarget, CPacket& pReqPacket)
 {
+	st_STC_Teleport res;
+
+	pReqPacket >> res;
+
+	printf("[Teleport] ret : %d\n", res.ret);
 	return 0;
 }
 

@@ -62,7 +62,7 @@ int CSelectObject::Connect(const char IP[16], unsigned short Port)
 
 void CSelectObject::SendPacket(CPacket* pPacket)
 {
-	EnterCriticalSection(&m_sendLock);
+	//EnterCriticalSection(&m_sendLock);
 	send(m_socket, pPacket->GetBufferPtr(), pPacket->GetDataSize(), 0);
-	LeaveCriticalSection(&m_sendLock);
+	//LeaveCriticalSection(&m_sendLock);
 }

@@ -137,9 +137,11 @@
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
     <ClInclude Include="CPacketProc.h" />
+    <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h" />
     <ClInclude Include="CUtill\CPacket.h" />
     <ClInclude Include="CUtill\CRingBuffer.h" />
     <ClInclude Include="CWinAPIThread.h" />
+    <ClInclude Include="GameDefines.h" />
     <ClInclude Include="NetWork\CBaseSelectNet.h" />
     <ClInclude Include="NetWork\CSelectObject.h" />
     <ClInclude Include="NetWork\NetWorkDefine.h" />

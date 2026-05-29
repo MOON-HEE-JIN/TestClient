@@ -25,11 +25,11 @@ int CBaseSelectNet::Init(int Port, int MaxClients)
 		return WSAGetLastError();
 	}
 	
-	/*
+	
 	ret = ListenSocket(m_Port, m_slisten);
 	if (ret != 0)
 		return ret;
-	*/
+	
 
 	return ret;
 }
@@ -38,7 +38,7 @@ int CBaseSelectNet::ListenSocket(unsigned short _port, SOCKET& out)
 {
 	int ret = 0;
 	out = socket(AF_INET, SOCK_STREAM, 0);
-
+	return 0;
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
@@ -85,7 +85,7 @@ int CBaseSelectNet::WorkerRun()
 	FD_SET baseSet;
 	FD_ZERO(&baseSet);
 
-	FD_SET(m_slisten, &baseSet);
+	//FD_SET(m_slisten, &baseSet);
 	for (CSelectObject* pObj : m_vecSelectSocket)
 	{
 		FD_SET(pObj->GetSocket(), &baseSet);
@@ -98,7 +98,7 @@ int CBaseSelectNet::WorkerRun()
 	timeval timeout{ 0, 10 * 1000 };
 	while (m_bRun)
 	{
-		ret = select(0, &rSet, NULL, NULL, &timeout);
+		ret = select(0, &rSet, NULL, NULL, NULL);
 		if (ret > 0)
 		{
 			int Loop = m_vecSelectSocket.size();
@@ -131,7 +131,7 @@ int CBaseSelectNet::WorkerRun()
 					m_vecSelectSocket[i]->GetRecvBuffer()->Dequeue(cPacket.GetBufferPtr(), header.size);
 					cPacket.MoveWritePos(header.size);
 
-					m_vecSelectSocket[i]->OnRecv(&cPacket);
+					m_vecSelectSocket[i]->OnRecv(header.type, &cPacket);
 				}
 			}
 		}

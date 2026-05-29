@@ -21,9 +21,10 @@ namespace
         HBITMAP backBuffer = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
         HGDIOBJ oldBmp = SelectObject(memDC, backBuffer);
 
-        HBRUSH bgBrush = CreateSolidBrush(RGB(128, 128, 128));
+        HBRUSH bgBrush = CreateSolidBrush(RGB(37, 37, 38));
         FillRect(memDC, &rect, bgBrush);
         DeleteObject(bgBrush);
+
 
         RECT playerRect{
             g_client.GetX(),
@@ -35,6 +36,7 @@ namespace
         HBRUSH clientBrush = CreateSolidBrush(RGB(0, 0, 0));
         FillRect(memDC, &playerRect, clientBrush);
         DeleteObject(clientBrush);
+
 
         BitBlt(hdc, 0, 0, rect.right, rect.bottom, memDC, 0, 0, SRCCOPY);
 

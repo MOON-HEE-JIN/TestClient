@@ -31,6 +31,14 @@ public:
 	SOCKET GetSocket() { return m_socket; }
 	CRingBuffer* GetRecvBuffer() { return m_recvBuffer; }
 public:
+	template<typename T>
+    void SendPacket(T& packet)
+    {
+        CPacket sendPacket;
+        sendPacket << packet;
+        SendPacket(&sendPacket);
+	}
     void SendPacket(CPacket* pPacket);
-    virtual void OnRecv(CPacket* pPacket) = 0;
+    virtual void OnRecv(int type, CPacket* pPacket) = 0;
+    virtual void Update(float delta) {};
 };
