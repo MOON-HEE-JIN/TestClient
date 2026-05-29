@@ -1,7 +1,9 @@
 ﻿#include "CWinAPIThread.h"
 
 #include "CClient.h"
+#include "./NetWork/CBaseSelectNet.h"
 
+CLockFreeQueue_SPSC<PROC_MSG> g_renderQueue;
 namespace
 {
     constexpr wchar_t kWinClassName[] = L"WinApiRenderWindow";
@@ -9,6 +11,9 @@ namespace
 
     CClient g_client;
     HWND g_hwnd = nullptr;
+
+	int testX = 140;
+    int testY = 140;
 
     void Render(HWND hwnd)
     {
@@ -26,16 +31,19 @@ namespace
         DeleteObject(bgBrush);
 
 
+        // Render
+        
         RECT playerRect{
-            g_client.GetX(),
-            g_client.GetY(),
-            g_client.GetX() + g_client.GetSize(),
-            g_client.GetY() + g_client.GetSize()
+            testX,
+            testY,
+            testX + 20,
+            testY + 20
         };
 
         HBRUSH clientBrush = CreateSolidBrush(RGB(0, 0, 0));
         FillRect(memDC, &playerRect, clientBrush);
         DeleteObject(clientBrush);
+        
 
 
         BitBlt(hdc, 0, 0, rect.right, rect.bottom, memDC, 0, 0, SRCCOPY);
@@ -56,16 +64,24 @@ namespace
 
         case WM_TIMER:
         {
-            constexpr int speed = 3;
-            RECT rect{};
-            GetClientRect(hwnd, &rect);
-            const int maxX = rect.right - g_client.GetSize();
-            const int maxY = rect.bottom - g_client.GetSize();
+			if (g_isTextInputFocused.load())
+                return 0;
 
-            if (GetAsyncKeyState('W') & 0x8000) g_client.Move(0, -speed, 0, 0, maxX, maxY);
-            if (GetAsyncKeyState('S') & 0x8000) g_client.Move(0, speed, 0, 0, maxX, maxY);
-            if (GetAsyncKeyState('A') & 0x8000) g_client.Move(-speed, 0, 0, 0, maxX, maxY);
-            if (GetAsyncKeyState('D') & 0x8000) g_client.Move(speed, 0, 0, 0, maxX, maxY);
+			g_SelectNet.GetMainSocket()->KeyProcess();
+            
+            PROC_MSG msg;
+            while (g_renderQueue.TryDequeue(msg))
+            {
+                // TODO : Render Packet 처리
+                if (msg.type == 0)
+                {
+                    float x, y;
+                    msg.packet >> x >> y;
+					testX = static_cast<int>(x);
+					testY = static_cast<int>(y);
+                }
+                
+			}
 
             InvalidateRect(hwnd, nullptr, FALSE);
             return 0;

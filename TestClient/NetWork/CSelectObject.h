@@ -41,4 +41,5 @@ public:
     void SendPacket(CPacket* pPacket);
     virtual void OnRecv(int type, CPacket* pPacket) = 0;
     virtual void Update(float delta) {};
+	virtual void KeyProcess() {};
 };

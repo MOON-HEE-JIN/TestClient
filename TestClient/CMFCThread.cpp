@@ -3,6 +3,7 @@
 
 #include "./Stub/StructDef.h"
 #include "./NetWork/CBaseSelectNet.h"
+#include "CClient.h"
 
 namespace
 {
@@ -83,6 +84,16 @@ namespace
             return 0;
         }
 
+        void OnEnSetFocusCommand()
+        {
+            g_isTextInputFocused.exchange(true);
+        }
+
+        void OnEnKillFocusCommand()
+        {
+            g_isTextInputFocused.exchange(false);
+		}
+
         BOOL PreTranslateMessage(MSG* pMsg) override
         {
             if (::GetFocus() == m_input.GetSafeHwnd())
@@ -138,6 +149,8 @@ namespace
         ON_WM_SIZE()
         ON_WM_DESTROY()
         ON_MESSAGE(WM_APP + 1, &CCheatWindow::OnSetInitialFocus)
+		ON_EN_SETFOCUS(ID_INPUT_EDIT, &CCheatWindow::OnEnSetFocusCommand)
+		ON_EN_KILLFOCUS(ID_INPUT_EDIT, &CCheatWindow::OnEnKillFocusCommand)
     END_MESSAGE_MAP()
 
 
@@ -207,6 +220,8 @@ void PostCheatCommand(const CString& cmd)
     const CString& command = tokens[0];
     if (command.CompareNoCase(_T("godmode")) == 0)
     {
+		CT2A convert(command);
+		const char* cmdStr = convert.m_psz;
     }
     else if (command.CompareNoCase(_T("changezone")) == 0)
     {
