@@ -1,4 +1,4 @@
-#include "CPacketProc.h"
+﻿#include "CPacketProc.h"
 #include "Stub/EnumDef.h"
 #include "CWinAPIThread.h"
 #include "GameDefines.h"
@@ -30,26 +30,25 @@ int CPacketProc::DO_ERROR_RESULT(CClient* pTarget, int ret, int type)
 
 int CPacketProc::DO_GAME_CHANGEZONE(CClient* pTarget, CPacket& pReqPacket)
 {
-	return 0;
-}
-
-int CPacketProc::DO_GAME_CREATECHAR(CClient* pTarget, CPacket& pReqPacket)
-{
-	st_STC_CreateChar res;
+	st_STC_ChangeZone res;
 	pReqPacket >> res;
 
-	EnqueueEntity(res.ID, res.pos.X, res.pos.Z);
-	return 0;
-}
+	if (res.ret == 0)
+	{
+		if (res.channel == 0 && res.zone == 0)
+		{
+			printf("로비로 이동\n");
+		}
+		else
+		{
+			printf("채널 : %d, 존 : %d\n", res.channel, res.zone);
+			printf("게임존으로 이동\n");
+		}
+	
+		CPacket clear;
+		g_renderQueue.Enqueue(PROC_MSG(ERENDER_CLEAR_ENTITIES, clear));
+	}
 
-int CPacketProc::DO_GAME_LEAVEZONE(CClient* pTarget, CPacket& pReqPacket)
-{
-	st_STC_LeaveZone res;
-	pReqPacket >> res;
-
-	CPacket render;
-	render << res.ID;
-	g_renderQueue.Enqueue(PROC_MSG(ERENDER_REMOVE_ENTITY, render));
 	return 0;
 }
 
@@ -66,24 +65,10 @@ int CPacketProc::DO_GAME_CONNECTINFO(CClient* pTarget, CPacket& pReqPacket)
 	return 0;
 }
 
-int CPacketProc::DO_GAME_ENTERZONE(CClient* pTarget, CPacket& pReqPacket)
-{
-	st_STC_EnterZone res;
-	pReqPacket >> res;
-
-	CPacket clear;
-	g_renderQueue.Enqueue(PROC_MSG(ERENDER_CLEAR_ENTITIES, clear));
-
-	for (int i = 0; i < res.Loop1; ++i)
-	{
-		EnqueueEntity(res.info[i].ID, res.info[i].pos.X, res.info[i].pos.Z);
-	}
-
-	return 0;
-}
 
 int CPacketProc::DO_GAME_MOVESTART(CClient* pTarget, CPacket& pReqPacket)
 {
+	printf("서버 이동 시작 패킷 수신\n");
 	return 0;
 }
 
@@ -92,6 +77,9 @@ int CPacketProc::DO_GAME_MOVESTOP(CClient* pTarget, CPacket& pReqPacket)
 	st_STC_MoveStop res;
 	pReqPacket >> res;
 
+	printf("서버 이동 중지 ID : %d\n", res.ID);
+
+	pTarget->PushLogicPacket(PROC_MSG(1, CPacket() << (int)ELOGIC_MSG::ELOGIC_MOVE_STOP << res.pos.X << res.pos.Z));
 	EnqueueEntity(res.ID, res.pos.X, res.pos.Z);
 	return 0;
 }
@@ -120,5 +108,71 @@ int CPacketProc::DO_GAME_TELEPORT(CClient* pTarget, CPacket& pReqPacket)
 	pReqPacket >> res;
 
 	printf("[Teleport] ret : %d\n", res.ret);
+
+	if (res.ret == 0)
+	{
+		CPacket logic;
+		logic << (int)ELOGIC_MSG::ELOGIC_TELEPORT << res.pos.X << res.pos.Z;
+		pTarget->PushLogicPacket(PROC_MSG(1, logic));
+
+		CPacket render;
+		render << res.pos.X << res.pos.Z;
+		g_renderQueue.Enqueue(PROC_MSG(ERENDER_LOCAL_PLAYER_POS, render));
+
+		CPacket clear;
+		g_renderQueue.Enqueue(PROC_MSG(ERENDER_CLEAR_ENTITIES, clear));
+	}
+
+	return 0;
+}
+
+int CPacketProc::DO_GAME_AOI_IN_PLAYER(CClient* pTarget, CPacket& pReqPacket)
+{
+	st_STC_AoiInPlayer res;
+
+	pReqPacket >> res;
+
+	EnqueueEntity(res.info.ID, res.info.pos.X, res.info.pos.Z);
+	return 0;
+}
+
+int CPacketProc::DO_GAME_AOI_IN_PLAYERS(CClient* pTarget, CPacket& pReqPacket)
+{
+	st_STC_AoiInPlayers res;
+	pReqPacket >> res;
+	
+	for (int i = 0; i < res.Loop1; ++i)
+	{
+		EnqueueEntity(res.info[i].ID, res.info[i].pos.X, res.info[i].pos.Z);
+
+		printf("AOI 범위 안 ID : %d, Pos : (%.2f, %.2f)\n", res.info[i].ID, res.info[i].pos.X, res.info[i].pos.Z);
+	}
+	return 0;
+}
+
+int CPacketProc::DO_GAME_AOI_OUT_PLAYER(CClient* pTarget, CPacket& pReqPacket)
+{
+	st_STC_AoiOutPlayer res;
+	pReqPacket >> res;
+	
+	CPacket render;
+	render << res.ID;
+	g_renderQueue.Enqueue(PROC_MSG(ERENDER_REMOVE_ENTITY, render));
+	printf("AOI 범위 밖 ID : %d\n", res.ID);
+	return 0;
+}
+
+int CPacketProc::DO_GAME_AOI_OUT_PLAYERS(CClient* pTarget, CPacket& pReqPacket)
+{
+	st_STC_AoiOutPlayers res;
+	pReqPacket >> res;
+
+	for (int i = 0; i < res.Loop1; ++i)
+	{
+		CPacket render;
+		render << res.info[i].ID;
+		g_renderQueue.Enqueue(PROC_MSG(ERENDER_REMOVE_ENTITY, render));
+		printf("AOI 범위 밖 ID : %d\n", res.info[i].ID);
+	}
 	return 0;
 }

@@ -43,6 +43,27 @@ void CClient::ProcessLogicPacket()
         {
             msg.packet >> m_eAction;
 		}
+        else if(msg.type == 1)
+        {
+			int logicMsg;
+			msg.packet >> logicMsg;
+            switch (logicMsg)
+            {
+                case ELOGIC_MSG::ELOGIC_TELEPORT:
+                    msg.packet >> m_pos.X >> m_pos.Z;
+				break;
+                case ELOGIC_MSG::ELOGIC_MOVE_STOP:
+                {
+					float diff = m_pos.DistanceToSquared(st_Vector3F((float)*msg.packet.GetReadBuffPtr(), 0, (float)*(msg.packet.GetReadBuffPtr() + sizeof(float))));
+                    
+					printf("Logic Move Stop Pos : (%.2f, %.2f) Diff : %.f\n", m_pos.X, m_pos.Z, diff);
+                    msg.packet >> m_pos.X >> m_pos.Z;
+                }
+                break;
+                default:
+                    break;
+            }
+        }
 	}
 }
 
@@ -109,7 +130,7 @@ void CClient::KeyProcess()
         {
             logic << (int)EACTION::EACTION_MOVE;
             st_CTS_MoveStart req;
-            req.dir = newDir;
+            req.dir = newDir.Normalization();
             SendPacket(req);
         }
 		m_logicqueue.Enqueue(PROC_MSG(0, logic));

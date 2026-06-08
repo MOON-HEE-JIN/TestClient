@@ -1,4 +1,4 @@
-﻿#include "PacketEnumDef.h"
+#include "PacketEnumDef.h"
 #include "CLIENT_STUB.h"
 template<typename Object, typename Packet>
 void Stub<Object,Packet>::InitRegisterFuncPointer()
@@ -6,9 +6,10 @@ void Stub<Object,Packet>::InitRegisterFuncPointer()
 	m_mapGAMEProc[GAME::LOOPBACK] = std::bind(&Stub::DO_GAME_LOOPBACK, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::CONNECTINFO] = std::bind(&Stub::DO_GAME_CONNECTINFO, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::CHANGEZONE] = std::bind(&Stub::DO_GAME_CHANGEZONE, this, std::placeholders::_1, std::placeholders::_2);
-	m_mapGAMEProc[GAME::ENTERZONE] = std::bind(&Stub::DO_GAME_ENTERZONE, this, std::placeholders::_1, std::placeholders::_2);
-	m_mapGAMEProc[GAME::LEAVEZONE] = std::bind(&Stub::DO_GAME_LEAVEZONE, this, std::placeholders::_1, std::placeholders::_2);
-	m_mapGAMEProc[GAME::CREATECHAR] = std::bind(&Stub::DO_GAME_CREATECHAR, this, std::placeholders::_1, std::placeholders::_2);
+	m_mapGAMEProc[GAME::AOI_IN_PLAYER] = std::bind(&Stub::DO_GAME_AOI_IN_PLAYER, this, std::placeholders::_1, std::placeholders::_2);
+	m_mapGAMEProc[GAME::AOI_IN_PLAYERS] = std::bind(&Stub::DO_GAME_AOI_IN_PLAYERS, this, std::placeholders::_1, std::placeholders::_2);
+	m_mapGAMEProc[GAME::AOI_OUT_PLAYER] = std::bind(&Stub::DO_GAME_AOI_OUT_PLAYER, this, std::placeholders::_1, std::placeholders::_2);
+	m_mapGAMEProc[GAME::AOI_OUT_PLAYERS] = std::bind(&Stub::DO_GAME_AOI_OUT_PLAYERS, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::MOVESTART] = std::bind(&Stub::DO_GAME_MOVESTART, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::MOVESTOP] = std::bind(&Stub::DO_GAME_MOVESTOP, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::CHANGEINGZONE] = std::bind(&Stub::DO_GAME_CHANGEINGZONE, this, std::placeholders::_1, std::placeholders::_2);

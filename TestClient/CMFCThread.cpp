@@ -7,8 +7,8 @@
 
 namespace
 {
-    constexpr int kWindowWidth = 300;
-    constexpr int kWindowHeight = 300;
+    constexpr int kWindowWidth = 500;
+    constexpr int kWindowHeight = 500;
 
     constexpr UINT ID_LOG_EDIT = 1001;
     constexpr UINT ID_INPUT_EDIT = 1002;
@@ -246,6 +246,20 @@ void PostCheatCommand(const CString& cmd)
 
         st_CTS_Teleport req;
         req.pos = {static_cast<float>(x), 0.0f, static_cast<float>(y)};
+
+		g_SelectNet.GetMainSocket()->SendPacket(req);
+    }
+    else if (command.CompareNoCase(_T("enterzone")) == 0)
+    {
+        st_CTS_ChangeZone req;
+
+        if (tokens.size() < 3)
+            return;
+
+		int channel = _ttoi(tokens[1]);
+        int zoneid = _ttoi(tokens[2]);
+        req.channel = channel;
+		req.zone = zoneid;
 
 		g_SelectNet.GetMainSocket()->SendPacket(req);
     }

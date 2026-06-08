@@ -66,8 +66,8 @@ int CBaseSelectNet::ListenSocket(unsigned short _port, SOCKET& out)
 	int nValue = 1;
 	setsockopt(out, SOL_SOCKET, TCP_NODELAY, (char*)&nValue, sizeof(nValue));
 
-	u_long nonBlocking = 1;
-	ioctlsocket(out, FIONBIO, &nonBlocking);
+	//u_long nonBlocking = 1;
+	//ioctlsocket(out, FIONBIO, &nonBlocking);
 
 	return ret;
 }
@@ -108,13 +108,16 @@ int CBaseSelectNet::WorkerRun()
 				if (!FD_ISSET(m_vecSelectSocket[i]->GetSocket(), &rSet))
 					continue;
 
-				int recvRet = recv(m_vecSelectSocket[i]->GetSocket(), (char*)m_vecSelectSocket[i]->GetRecvBuffer()->GetWritePointer(), 0, MSG_PEEK);
+				char buff[4096];
+				ZeroMemory(buff, sizeof(buff));
+
+				int recvRet = recv(m_vecSelectSocket[i]->GetSocket(), buff, sizeof(buff), 0);
 				if (recvRet == 0)
 				{
 					// 종료 처리
 					continue;
 				}
-
+				m_vecSelectSocket[i]->GetRecvBuffer()->Enqueue(buff, recvRet);
 				while (1)
 				{
 					if (sizeof(st_Header) > m_vecSelectSocket[i]->GetRecvBuffer()->GetUseSize())

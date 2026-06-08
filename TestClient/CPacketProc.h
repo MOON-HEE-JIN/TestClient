@@ -23,14 +23,8 @@ private:
 
 	// Stub을(를) 통해 상속됨
 	int DO_GAME_CHANGEZONE(CClient* pTarget, CPacket& pReqPacket) override;
-
-	// Stub을(를) 통해 상속됨
-	int DO_GAME_CREATECHAR(CClient* pTarget, CPacket& pReqPacket) override;
-	int DO_GAME_LEAVEZONE(CClient* pTarget, CPacket& pReqPacket) override;
-
 	// Stub을(를) 통해 상속됨
 	int DO_GAME_CONNECTINFO(CClient* pTarget, CPacket& pReqPacket) override;
-	int DO_GAME_ENTERZONE(CClient* pTarget, CPacket& pReqPacket) override;
 
 	// Stub을(를) 통해 상속됨
 	int DO_GAME_MOVESTART(CClient* pTarget, CPacket& pReqPacket) override;
@@ -44,4 +38,10 @@ private:
 
 	// Stub을(를) 통해 상속됨
 	int DO_GAME_TELEPORT(CClient* pTarget, CPacket& pReqPacket) override;
+
+	// Stub을(를) 통해 상속됨
+	int DO_GAME_AOI_IN_PLAYER(CClient* pTarget, CPacket& pReqPacket) override;
+	int DO_GAME_AOI_IN_PLAYERS(CClient* pTarget, CPacket& pReqPacket) override;
+	int DO_GAME_AOI_OUT_PLAYER(CClient* pTarget, CPacket& pReqPacket) override;
+	int DO_GAME_AOI_OUT_PLAYERS(CClient* pTarget, CPacket& pReqPacket) override;
 };

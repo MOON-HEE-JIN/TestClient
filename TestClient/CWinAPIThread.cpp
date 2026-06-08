@@ -1,4 +1,4 @@
-#include "CWinAPIThread.h"
+﻿#include "CWinAPIThread.h"
 
 #include <map>
 #include <string>
@@ -215,6 +215,7 @@ namespace
         auto it = g_otherPlayers.find(id);
         if (it == g_otherPlayers.end())
         {
+			printf("RemoveEntity 찾지 못함 ID : %d\n", id);
             return;
         }
 
