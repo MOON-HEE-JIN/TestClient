@@ -25,6 +25,9 @@
     <Filter Include="소스 파일\Logic">
       <UniqueIdentifier>{81d8e95c-219e-48fb-9924-06e103c4ee09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\RenderObject">
+      <UniqueIdentifier>{66028e87-1875-4f93-838a-32bd9f97d1fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CClient.h" />
@@ -72,6 +75,18 @@
     <ClInclude Include="GameDefines.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="RenderObject\CWinObject.h">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\CMap.h">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\COtherPlayer.h">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderObject\CPlayer.h">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CClient.cpp" />
@@ -98,6 +113,18 @@
     </ClCompile>
     <ClCompile Include="NetWork\CBaseSelectNet.cpp">
       <Filter>소스 파일\NetWork</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\CWinObject.cpp">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\CMap.cpp">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\COtherPlayer.cpp">
+      <Filter>소스 파일\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderObject\CPlayer.cpp">
+      <Filter>소스 파일\RenderObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

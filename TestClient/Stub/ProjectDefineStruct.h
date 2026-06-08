@@ -71,6 +71,18 @@ struct st_Vector3F
 		return st_Vector3F(0, 0, 0);
 	}
 
+	st_Vector3F& Normalization()
+	{
+		float len = Length();
+		if (len > 0)
+		{
+			X /= len;
+			Y /= len;
+			Z /= len;
+		}
+		return *this;
+	}
+
 	bool operator==(const st_Vector3F& other) const
 	{
 		return X == other.X && Y == other.Y && Z == other.Z;

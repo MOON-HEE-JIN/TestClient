@@ -145,6 +145,10 @@
     <ClInclude Include="NetWork\CBaseSelectNet.h" />
     <ClInclude Include="NetWork\CSelectObject.h" />
     <ClInclude Include="NetWork\NetWorkDefine.h" />
+    <ClInclude Include="RenderObject\CMap.h" />
+    <ClInclude Include="RenderObject\COtherPlayer.h" />
+    <ClInclude Include="RenderObject\CPlayer.h" />
+    <ClInclude Include="RenderObject\CWinObject.h" />
     <ClInclude Include="Stub\CLIENT_STUB.h" />
     <ClInclude Include="Stub\EnumDef.h" />
     <ClInclude Include="Stub\PacketEnumDef.h" />
@@ -162,6 +166,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetWork\CBaseSelectNet.cpp" />
     <ClCompile Include="NetWork\CSelectObject.cpp" />
+    <ClCompile Include="RenderObject\CMap.cpp" />
+    <ClCompile Include="RenderObject\COtherPlayer.cpp" />
+    <ClCompile Include="RenderObject\CPlayer.cpp" />
+    <ClCompile Include="RenderObject\CWinObject.cpp" />
     <ClCompile Include="Stub\CLIENT_STUB.cpp" />
     <ClCompile Include="Stub\Serialization.cpp" />
   </ItemGroup>
