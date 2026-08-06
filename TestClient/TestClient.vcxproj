@@ -136,10 +136,12 @@
   <ItemGroup>
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
+    <ClInclude Include="COtherClient.h" />
     <ClInclude Include="CPacketProc.h" />
     <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h" />
     <ClInclude Include="CUtill\CPacket.h" />
     <ClInclude Include="CUtill\CRingBuffer.h" />
+    <ClInclude Include="CUtill\CUtill.h" />
     <ClInclude Include="CWinAPIThread.h" />
     <ClInclude Include="GameDefines.h" />
     <ClInclude Include="NetWork\CBaseSelectNet.h" />
@@ -159,9 +161,11 @@
   <ItemGroup>
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="CMFCThread.cpp" />
+    <ClCompile Include="COtherClient.cpp" />
     <ClCompile Include="CPacketProc.cpp" />
     <ClCompile Include="CUtill\CPacket.cpp" />
     <ClCompile Include="CUtill\CRingBuffer.cpp" />
+    <ClCompile Include="CUtill\CUtill.cpp" />
     <ClCompile Include="CWinAPIThread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetWork\CBaseSelectNet.cpp" />

@@ -87,6 +87,12 @@
     <ClInclude Include="RenderObject\CPlayer.h">
       <Filter>소스 파일\RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="CUtill\CUtill.h">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClInclude>
+    <ClInclude Include="COtherClient.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CClient.cpp" />
@@ -125,6 +131,12 @@
     </ClCompile>
     <ClCompile Include="RenderObject\CPlayer.cpp">
       <Filter>소스 파일\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CUtill\CUtill.cpp">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClCompile>
+    <ClCompile Include="COtherClient.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

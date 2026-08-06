@@ -207,6 +207,7 @@ namespace
 
         COtherPlayer* otherPlayer = new COtherPlayer(id, x, z);
         g_otherPlayers[id] = otherPlayer;
+        
         AddRenderObject(ERENDER_LAYER_OTHER_PLAYER, otherPlayer);
     }
 
@@ -264,20 +265,24 @@ namespace
         PROC_MSG msg;
         while (g_renderQueue.TryDequeue(msg))
         {
-            if (msg.type == ERENDER_LOCAL_PLAYER_POS)
+            switch (msg.type)
+            {
+            case ERENDER_MSG::ERENDER_LOCAL_PLAYER_POS:
             {
                 float x = 0.0f;
                 float z = 0.0f;
                 msg.packet >> x >> z;
                 SetLocalPlayerPosition(x, z);
             }
-            else if (msg.type == ERENDER_SET_LOCAL_PLAYER_ID)
+                break;
+            case ERENDER_MSG::ERENDER_SET_LOCAL_PLAYER_ID:
             {
                 int id = -1;
                 msg.packet >> id;
                 SetLocalPlayerId(id);
             }
-            else if (msg.type == ERENDER_SET_ENTITY)
+                break;
+            case ERENDER_MSG::ERENDER_SET_ENTITY:
             {
                 int id = -1;
                 float x = 0.0f;
@@ -285,16 +290,21 @@ namespace
                 msg.packet >> id >> x >> z;
                 SetEntity(id, x, z);
             }
-            else if (msg.type == ERENDER_REMOVE_ENTITY)
+                break;
+            case ERENDER_MSG::ERENDER_REMOVE_ENTITY:
             {
                 int id = -1;
                 msg.packet >> id;
                 RemoveEntity(id);
             }
-            else if (msg.type == ERENDER_CLEAR_ENTITIES)
+                break;
+            case ERENDER_MSG::ERENDER_CLEAR_ENTITIES:
             {
                 ClearOtherPlayers();
             }
+                break;
+            }
+            
         }
     }
 
@@ -351,7 +361,8 @@ namespace
 			if (g_isTextInputFocused.load())
                 return 0;
 
-			g_SelectNet.GetMainSocket()->KeyProcess();
+            if(!g_SelectNet.GetMainSocket()->GetKeyLock())
+			    g_SelectNet.GetMainSocket()->KeyProcess();
             ProcessRenderQueue();
 
             InvalidateRect(hwnd, nullptr, FALSE);

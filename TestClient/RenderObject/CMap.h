@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CWinObject.h"
 
@@ -9,7 +9,6 @@ public:
 
 	void SetAoiCenter(float x, float z) noexcept;
 	void Render(HDC hdc, const RECT& mapRect) override;
-
 private:
 	int ClampTile(int tile, int maxTile) const noexcept;
 

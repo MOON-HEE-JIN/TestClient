@@ -6,35 +6,50 @@
 #include "CWinAPIThread.h"
 #include "CMFCThread.h"
 #include "NetWork/CBaseSelectNet.h"
+#include "CWinAPIThread.h"
 #include "CClient.h"
-
+#include "CUtill/CUtill.h"
+#include <timeapi.h>
+#pragma comment(lib, "winmm.lib")
 HANDLE g_hStopEvent;
-
+#define FIXED_DELTA 0.01667f  
+#define MAX_FRAME_LOOP_COUNT 5
 unsigned __stdcall LogicThread(void*)
 {
-    using namespace std::chrono;
-
-    auto prev = steady_clock::now();
-
+    timeBeginPeriod(1);
+    double lasttime = CUtil::GetQPCNowTime();
+	double accumulatedtime = 0.0f;
     while (true)
     {
-        auto now = steady_clock::now();
+        //1000 Frames 1초당 1000 처리
+        DWORD ret = WaitForSingleObject(g_hStopEvent, 1);
 
-        float delta =
-            duration<float>(now - prev).count();
-
-        prev = now;
-
-        g_SelectNet.GetMainSocket()->Update(delta);
-
-        DWORD ret = WaitForSingleObject(g_hStopEvent, 16);
-
+        // 종료 이벤트
         if (ret == WAIT_OBJECT_0)
-        {
             break;
+
+        // 지연 시간 누적
+        double nowtime = CUtil::GetQPCNowTime();
+        double frame = nowtime - lasttime;
+        lasttime = nowtime;
+
+        accumulatedtime += frame;
+
+        int nLoop = 0;
+        while (accumulatedtime >= FIXED_DELTA && nLoop < MAX_FRAME_LOOP_COUNT)
+        {
+            g_SelectNet.GetMainSocket()->Update(0);
+            accumulatedtime -= FIXED_DELTA;
+            nLoop++;
+        }
+
+        // 너무 많은 frame 이 쌓인다면 쌓인 frame 처리하느라 더 지연 최대 frame 만큼만 돌리기
+        if (nLoop == MAX_FRAME_LOOP_COUNT)
+        {
+            accumulatedtime = 0.0f;
         }
     }
-
+    timeEndPeriod(1);
     return 0;
 }
 
@@ -47,6 +62,7 @@ int wmain()
     * LogicThread : 게임 로직 처리를 담당하는 Thread
     * NetworkThread : 네트워크 처리를 담당하는 Thread
     */
+    
     HINSTANCE hInst = ::GetModuleHandle(nullptr);
 
     if (!AfxWinInit(hInst, nullptr, ::GetCommandLine(), SW_SHOW))

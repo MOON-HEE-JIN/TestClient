@@ -263,4 +263,12 @@ void PostCheatCommand(const CString& cmd)
 
 		g_SelectNet.GetMainSocket()->SendPacket(req);
     }
+    else if (command.CompareNoCase(_T("lock")) == 0)
+    {
+        g_SelectNet.GetMainSocket()->LockKey();
+    }
+    else if (command.CompareNoCase(_T("unlock")) == 0)
+    {
+        g_SelectNet.GetMainSocket()->UnLockKey();
+    }
 }
