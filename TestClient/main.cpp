@@ -7,6 +7,7 @@
 #include "CMFCThread.h"
 #include "NetWork/CBaseSelectNet.h"
 #include "CWinAPIThread.h"
+#include "AoiTestRecorder.h"
 #include "CClient.h"
 #include "CUtill/CUtill.h"
 #include <timeapi.h>
@@ -53,7 +54,7 @@ unsigned __stdcall LogicThread(void*)
     return 0;
 }
 
-int wmain()
+int wmain(int argc, wchar_t* argv[])
 {
     /*
     * 생성 된 Thread 목록
@@ -63,18 +64,31 @@ int wmain()
     * NetworkThread : 네트워크 처리를 담당하는 Thread
     */
     
+    bool autoAoiTest = false;
+    int autoClientIndex = -1;
+    double autoStartDelaySeconds = 0.0;
+    if (argc >= 4 && _wcsicmp(argv[1], L"--aoi-auto") == 0)
+    {
+        autoAoiTest = true;
+        autoClientIndex = _wtoi(argv[2]);
+        autoStartDelaySeconds = static_cast<double>(_wtoi(argv[3])) / 1000.0;
+    }
+
     HINSTANCE hInst = ::GetModuleHandle(nullptr);
 
     if (!AfxWinInit(hInst, nullptr, ::GetCommandLine(), SW_SHOW))
         return 1;
 
+    CAoiTestRecorder::Get().Initialize(autoClientIndex);
+    SetWinApiAutoTestMode(autoAoiTest);
+
     unsigned int winApiThreadId = 0;
 
     HANDLE hWinApiThread = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, CWinAPIThread, nullptr, 0, &winApiThreadId));
     
-    CWinThread* pMfcThread = StartMFCThread();
+    CWinThread* pMfcThread = autoAoiTest ? nullptr : StartMFCThread();
 
-    if (!hWinApiThread || !pMfcThread)
+    if (!hWinApiThread || (!autoAoiTest && !pMfcThread))
     {
         if (hWinApiThread)
             CloseHandle(hWinApiThread);
@@ -86,24 +100,41 @@ int wmain()
     }
 
 	CClient client;
+    CAoiTestRecorder::Get().SetLocalPosition(client.GetPos());
+    if (autoAoiTest)
+        client.EnableAutoAoiTest(autoClientIndex, autoStartDelaySeconds);
     int ret = client.Connect("127.0.0.1", 7799);
 	g_SelectNet.StartServer(&g_SelectNet, &client);
 
     g_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	HANDLE hLogicThread = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, LogicThread, nullptr, 0, nullptr));
 
-    HANDLE handles[2] =
+    if (autoAoiTest)
     {
-        hWinApiThread,
-        pMfcThread->m_hThread
-    };
-
-    WaitForMultipleObjects(2, handles, TRUE, INFINITE);
+        WaitForSingleObject(hWinApiThread, INFINITE);
+    }
+    else
+    {
+        HANDLE handles[2] =
+        {
+            hWinApiThread,
+            pMfcThread->m_hThread
+        };
+        WaitForMultipleObjects(2, handles, TRUE, INFINITE);
+    }
+	g_SelectNet.ServerShutDown();
 	g_SelectNet.WaitStopServer();
 	SetEvent(g_hStopEvent);
+    WaitForSingleObject(hLogicThread, INFINITE);
+
+    CloseHandle(hLogicThread);
+    CloseHandle(g_hStopEvent);
     CloseHandle(hWinApiThread);
 
-    delete pMfcThread;
+    if (pMfcThread != nullptr)
+        delete pMfcThread;
+
+    CAoiTestRecorder::Get().Finalize();
 
     return 0;
 }

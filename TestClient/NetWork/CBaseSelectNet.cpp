@@ -8,7 +8,7 @@ CBaseSelectNet g_SelectNet;
 
 CBaseSelectNet::CBaseSelectNet()
 {
-	m_bRun = false;
+	m_bRun.store(false);
 	m_slisten = INVALID_SOCKET;
 }
 
@@ -95,10 +95,10 @@ int CBaseSelectNet::WorkerRun()
 	memcpy(&rSet, &baseSet, sizeof(FD_SET));
 
 	int ret;
-	timeval timeout{ 0, 10 * 1000 };
-	while (m_bRun)
+	while (m_bRun.load())
 	{
-		ret = select(0, &rSet, NULL, NULL, NULL);
+		timeval timeout{ 0, 100 * 1000 };
+		ret = select(0, &rSet, NULL, NULL, &timeout);
 		if (ret > 0)
 		{
 			int Loop = m_vecSelectSocket.size();
@@ -112,7 +112,7 @@ int CBaseSelectNet::WorkerRun()
 				ZeroMemory(buff, sizeof(buff));
 
 				int recvRet = recv(m_vecSelectSocket[i]->GetSocket(), buff, sizeof(buff), 0);
-				if (recvRet == 0)
+				if (recvRet <= 0)
 				{
 					// 종료 처리
 					continue;
@@ -146,11 +146,10 @@ int CBaseSelectNet::WorkerRun()
 
 void CBaseSelectNet::StartServer(CBaseSelectNet* ptr, CSelectObject* pSelectObject)
 {
-	m_bRun = true;
-	
 	if (pSelectObject == nullptr)
 		return;
 
+	m_bRun.store(true);
 	m_vecSelectSocket.push_back(pSelectObject);
 	m_hWorkerThread = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, ptr, 0, NULL);
 }
@@ -162,5 +161,18 @@ void CBaseSelectNet::WaitStopServer()
 		WaitForSingleObject(m_hWorkerThread, INFINITE);
 		CloseHandle(m_hWorkerThread);
 		m_hWorkerThread = NULL;
+	}
+}
+
+void CBaseSelectNet::ServerShutDown()
+{
+	if (!m_bRun.exchange(false))
+		return;
+
+	// select()를 즉시 깨워 WorkerThread가 종료 조건을 확인하게 한다.
+	for (CSelectObject* pObject : m_vecSelectSocket)
+	{
+		if (pObject != nullptr && pObject->GetSocket() != INVALID_SOCKET)
+			shutdown(pObject->GetSocket(), SD_BOTH);
 	}
 }

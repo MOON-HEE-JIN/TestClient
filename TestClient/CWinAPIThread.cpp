@@ -2,7 +2,9 @@
 
 #include <map>
 #include <string>
+#include <atomic>
 
+#include "AoiTestRecorder.h"
 #include "CClient.h"
 #include "GameDefines.h"
 #include "RenderObject/CMap.h"
@@ -32,6 +34,7 @@ namespace
 
     CClient g_client;
     HWND g_hwnd = nullptr;
+    std::atomic<bool> g_autoTestMode = false;
 
     int g_localPlayerId = -1;
     CMap* g_map = nullptr;
@@ -207,6 +210,7 @@ namespace
 
         COtherPlayer* otherPlayer = new COtherPlayer(id, x, z);
         g_otherPlayers[id] = otherPlayer;
+        CAoiTestRecorder::Get().RecordOtherRendered(id, st_Vector3F(x, 0.0f, z));
         
         AddRenderObject(ERENDER_LAYER_OTHER_PLAYER, otherPlayer);
     }
@@ -389,6 +393,11 @@ HWND GetWinApiWindowHandle()
     return g_hwnd;
 }
 
+void SetWinApiAutoTestMode(bool enabled)
+{
+    g_autoTestMode.store(enabled);
+}
+
 unsigned __stdcall CWinAPIThread(void*)
 {
     HINSTANCE hInst = GetModuleHandle(nullptr);
@@ -420,7 +429,7 @@ unsigned __stdcall CWinAPIThread(void*)
         return 1;
     }
 
-    ShowWindow(g_hwnd, SW_SHOW);
+    ShowWindow(g_hwnd, g_autoTestMode.load() ? SW_HIDE : SW_SHOW);
     UpdateWindow(g_hwnd);
 
     MSG msg{};

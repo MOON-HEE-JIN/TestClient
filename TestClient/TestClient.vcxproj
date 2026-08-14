@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AoiTestRecorder.h" />
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
     <ClInclude Include="COtherClient.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Stub\StructDef.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AoiTestRecorder.cpp" />
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="CMFCThread.cpp" />
     <ClCompile Include="COtherClient.cpp" />

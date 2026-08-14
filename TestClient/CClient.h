@@ -16,6 +16,22 @@ public:
     int GetSize() const noexcept;
 
 private:
+    enum class EAutoAoiState
+    {
+        Disabled,
+        WaitConnect,
+        WaitZone,
+        WaitTeleport,
+        Warmup,
+        GridMove,
+        GridStopWait,
+        SeparateMove,
+        SeparateStopWait,
+        ReturnMove,
+        FinalWait,
+        Finished
+    };
+
     int m_iID;
     st_Vector3F m_pos;
     st_Vector3F m_dir;
@@ -31,11 +47,25 @@ private:
     // 컨테이너 에 접근 하는 Queue 를 넣거나 Lock 을 걸어야한다
     // 해당 환경을 피하기 위해서 Client 에서 관리하도록 설정
     std::map<int, COtherClient*> m_mapOtherPlayer;
+
+    bool m_autoTestEnabled = false;
+    bool m_autoZoneEntered = false;
+    bool m_autoTeleportCompleted = false;
+    int m_autoClientIndex = -1;
+    double m_autoStartDelaySeconds = 0.0;
+    double m_autoTestBeginTime = 0.0;
+    double m_autoStateBeginTime = 0.0;
+    EAutoAoiState m_autoState = EAutoAoiState::Disabled;
 private:
     void ProcessPacket();
 	void ProcessLogicPacket();
     void ProcessAction();
     void ProcessOtherPlayer();
+    void UpdateAutoAoiTest();
+    void SetAutoState(EAutoAoiState state, double now);
+    void StartAutoMove(const st_Vector3F& dir);
+    void StopAutoMove();
+    void FinishAutoAoiTest();
 public:
 	virtual void OnRecv(int type, CPacket* pPacket) override;
 	virtual void Update(float delta) override;
@@ -50,6 +80,10 @@ public:
     void SetID(int id) { m_iID = id; }
     int GetID() { return m_iID; }
     st_Vector3F GetPos() const { return m_pos; }    
+
+    void EnableAutoAoiTest(int clientIndex, double startDelaySeconds);
+    void NotifyZoneEntered(int channel, int zone, st_Vector3F pos);
+    void NotifyTeleportCompleted();
 };
 
 extern std::atomic<bool> g_isTextInputFocused;

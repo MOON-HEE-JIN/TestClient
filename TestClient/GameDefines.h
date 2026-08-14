@@ -21,6 +21,7 @@ constexpr int MAP_HEIGHT = 1024;
 constexpr int TILE_SIZE = 64;
 constexpr int TILE_COUNT_X = MAP_WIDTH / TILE_SIZE;
 constexpr int TILE_COUNT_Y = MAP_HEIGHT / TILE_SIZE;
+constexpr int GRID_COUNT = 4;
 constexpr int PLAYER_SIZE = 20;
 constexpr int AOI_TILE_RADIUS = 1;
 

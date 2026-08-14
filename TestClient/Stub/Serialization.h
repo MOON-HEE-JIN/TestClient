@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "StructDef.h" 
 
@@ -13,7 +13,9 @@ int Serialization(char* buffer, st_EntityInfo& _value);
 int Serialization(char* buffer, st_Header& _value);
 int Serialization(char* buffer, st_Msg& _value);
 int Serialization(char* buffer, st_PlayerInfo& _value);
+int Serialization(char* buffer, st_PlayerOtherMove& _value);
 int Serialization(char* buffer, st_STC_AoiInPlayer& _value);
+int Serialization(char* buffer, st_STC_AoiInPlayerMoves& _value);
 int Serialization(char* buffer, st_STC_AoiInPlayers& _value);
 int Serialization(char* buffer, st_STC_AoiOutPlayer& _value);
 int Serialization(char* buffer, st_STC_AoiOutPlayers& _value);
@@ -42,7 +44,9 @@ int UnSerialization(char* buffer, st_EntityInfo& _value);
 int UnSerialization(char* buffer, st_Header& _value);
 int UnSerialization(char* buffer, st_Msg& _value);
 int UnSerialization(char* buffer, st_PlayerInfo& _value);
+int UnSerialization(char* buffer, st_PlayerOtherMove& _value);
 int UnSerialization(char* buffer, st_STC_AoiInPlayer& _value);
+int UnSerialization(char* buffer, st_STC_AoiInPlayerMoves& _value);
 int UnSerialization(char* buffer, st_STC_AoiInPlayers& _value);
 int UnSerialization(char* buffer, st_STC_AoiOutPlayer& _value);
 int UnSerialization(char* buffer, st_STC_AoiOutPlayers& _value);

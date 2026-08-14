@@ -47,4 +47,7 @@ private:
 
 	// Stub을(를) 통해 상속됨
 	int DO_GAME_OTHERMOVESTART(CClient* pTarget, CPacket& pReqPacket) override;
+
+	// Stub을(를) 통해 상속됨
+	int DO_GAME_AOI_IN_PLAYERS_MOVE(CClient* pTarget, CPacket& pReqPacket) override;
 };

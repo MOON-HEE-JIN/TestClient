@@ -1,6 +1,7 @@
 ﻿#include "CMFCThread.h"
 #include <vector>
 
+#include "AoiTestRecorder.h"
 #include "./Stub/StructDef.h"
 #include "./NetWork/CBaseSelectNet.h"
 #include "CClient.h"
@@ -247,6 +248,7 @@ void PostCheatCommand(const CString& cmd)
         st_CTS_Teleport req;
         req.pos = {static_cast<float>(x), 0.0f, static_cast<float>(y)};
 
+		CAoiTestRecorder::Get().BeginLocalTeleport(req.pos);
 		g_SelectNet.GetMainSocket()->SendPacket(req);
     }
     else if (command.CompareNoCase(_T("enterzone")) == 0)
@@ -270,5 +272,18 @@ void PostCheatCommand(const CString& cmd)
     else if (command.CompareNoCase(_T("unlock")) == 0)
     {
         g_SelectNet.GetMainSocket()->UnLockKey();
+    }
+    else if (command.CompareNoCase(_T("aoitest")) == 0)
+    {
+        if (tokens.size() >= 2 && tokens[1].CompareNoCase(_T("save")) == 0)
+        {
+            CAoiTestRecorder::Get().SaveSnapshot();
+        }
+        else
+        {
+            const std::wstring path = CAoiTestRecorder::Get().GetReportPath();
+            wprintf(L"[AOI TEST] Usage: aoitest save\n");
+            wprintf(L"[AOI TEST] Result file: %ls\n", path.c_str());
+        }
     }
 }

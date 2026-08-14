@@ -19,7 +19,7 @@ public:
 private:
 	int ListenSocket(unsigned short _port, SOCKET& out);
 private:
-	bool m_bRun;
+	std::atomic<bool> m_bRun;
 	SOCKET m_slisten;
 	HANDLE m_hAceeptThread;
 	HANDLE m_hWorkerThread;

@@ -15,6 +15,7 @@ void Stub<Object,Packet>::InitRegisterFuncPointer()
 	m_mapGAMEProc[GAME::CHANGEINGZONE] = std::bind(&Stub::DO_GAME_CHANGEINGZONE, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::TELEPORT] = std::bind(&Stub::DO_GAME_TELEPORT, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapGAMEProc[GAME::OTHERMOVESTART] = std::bind(&Stub::DO_GAME_OTHERMOVESTART, this, std::placeholders::_1, std::placeholders::_2);
+	m_mapGAMEProc[GAME::AOI_IN_PLAYERS_MOVE] = std::bind(&Stub::DO_GAME_AOI_IN_PLAYERS_MOVE, this, std::placeholders::_1, std::placeholders::_2);
 	m_mapOBSERVERProc[OBSERVER::CONNET_OBSERVER] = std::bind(&Stub::DO_OBSERVER_CONNET_OBSERVER, this, std::placeholders::_1, std::placeholders::_2);
 }
 template<typename Object, typename Packet>

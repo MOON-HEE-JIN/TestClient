@@ -9,5 +9,6 @@ class CWinObject;
 
 unsigned __stdcall CWinAPIThread(void* arg);
 HWND GetWinApiWindowHandle();
+void SetWinApiAutoTestMode(bool enabled);
 extern CLockFreeQueue_SPSC<PROC_MSG> g_renderQueue;
 extern std::vector<std::vector<CWinObject*>> g_RenderObjects;

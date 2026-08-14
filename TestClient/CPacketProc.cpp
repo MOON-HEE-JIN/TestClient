@@ -1,5 +1,6 @@
 ﻿#include "CPacketProc.h"
 #include "Stub/EnumDef.h"
+#include "AoiTestRecorder.h"
 #include "CWinAPIThread.h"
 #include "GameDefines.h"
 
@@ -44,9 +45,14 @@ int CPacketProc::DO_GAME_CHANGEZONE(CClient* pTarget, CPacket& pReqPacket)
 			printf("채널 : %d, 존 : %d\n", res.channel, res.zone);
 			printf("게임존으로 이동\n");
 		}
-	
+		pTarget->NotifyZoneEntered(res.channel, res.zone, res.spawn);
+		
 		CPacket clear;
 		g_renderQueue.Enqueue(PROC_MSG(ERENDER_CLEAR_ENTITIES, clear));
+
+		CPacket render;
+		render << res.spawn.X << res.spawn.Z;
+		g_renderQueue.Enqueue(PROC_MSG(ERENDER_LOCAL_PLAYER_POS, render));
 	}
 
 	return 0;
@@ -60,6 +66,7 @@ int CPacketProc::DO_GAME_CONNECTINFO(CClient* pTarget, CPacket& pReqPacket)
 	printf("나의 ID : %d\n", res.info.ID);
 
 	pTarget->SetID(res.info.ID);
+	CAoiTestRecorder::Get().SetLocalPlayerID(res.info.ID);
 
 	CPacket render;
 	render << res.info.ID;
@@ -72,6 +79,7 @@ int CPacketProc::DO_GAME_MOVESTART(CClient* pTarget, CPacket& pReqPacket)
 {
 	st_STC_MoveStart res;
 	pReqPacket >> res;
+	CAoiTestRecorder::Get().RecordLocalMoveStartResponse(res.ret, res.pos);
 	printf("서버 이동 시작 패킷 수신 %d\n", res.ret);
 	return 0;
 }
@@ -80,6 +88,7 @@ int CPacketProc::DO_GAME_MOVESTOP(CClient* pTarget, CPacket& pReqPacket)
 {
 	st_STC_MoveStop res;
 	pReqPacket >> res;
+	CAoiTestRecorder::Get().RecordMoveStopResponse(res.ID, res.ret, res.pos);
 
 	if (res.ret != 0)
 	{
@@ -150,6 +159,7 @@ int CPacketProc::DO_GAME_TELEPORT(CClient* pTarget, CPacket& pReqPacket)
 
 		CPacket clear;
 		g_renderQueue.Enqueue(PROC_MSG(ERENDER_CLEAR_ENTITIES, clear));
+		pTarget->NotifyTeleportCompleted();
 	}
 
 	return 0;
@@ -160,6 +170,7 @@ int CPacketProc::DO_GAME_AOI_IN_PLAYER(CClient* pTarget, CPacket& pReqPacket)
 	st_STC_AoiInPlayer res;
 
 	pReqPacket >> res;
+	CAoiTestRecorder::Get().RecordAoiIn(res.info, false);
 	
 	if (pTarget->GetID() == res.info.ID)
 	{
@@ -185,6 +196,7 @@ int CPacketProc::DO_GAME_AOI_IN_PLAYERS(CClient* pTarget, CPacket& pReqPacket)
 	
 	for (int i = 0; i < res.Loop1; ++i)
 	{
+		CAoiTestRecorder::Get().RecordAoiIn(res.info[i], true);
 		if (pTarget->GetID() == res.info[i].ID)
 		{
 			printf("자신의 ID 를 받음\n");
@@ -208,6 +220,7 @@ int CPacketProc::DO_GAME_AOI_OUT_PLAYER(CClient* pTarget, CPacket& pReqPacket)
 {
 	st_STC_AoiOutPlayer res;
 	pReqPacket >> res;
+	CAoiTestRecorder::Get().RecordAoiOut(res.ID, false);
 	
 	CPacket logic;
 	logic << (int)ELOGIC_MSG::ELOGIC_REMOVE_OTHER_PLAYER;
@@ -229,6 +242,7 @@ int CPacketProc::DO_GAME_AOI_OUT_PLAYERS(CClient* pTarget, CPacket& pReqPacket)
 
 	for (int i = 0; i < res.Loop1; ++i)
 	{
+		CAoiTestRecorder::Get().RecordAoiOut(res.info[i].ID, true);
 		if (pTarget->GetID() == res.info[i].ID)
 		{
 			printf("자신의 ID 를 받음\n");
@@ -253,6 +267,7 @@ int CPacketProc::DO_GAME_OTHERMOVESTART(CClient* pTarget, CPacket& pReqPacket)
 {
 	st_STC_OtherMoveStart res;
 	pReqPacket >> res;
+	CAoiTestRecorder::Get().RecordOtherMoveStart(res.ID, res.pos, res.dir);
 
 	if (pTarget->GetID() == res.ID)
 	{
@@ -266,5 +281,25 @@ int CPacketProc::DO_GAME_OTHERMOVESTART(CClient* pTarget, CPacket& pReqPacket)
 
 	pTarget->PushLogicPacket({ 2, logic });
 
+	return 0;
+}
+
+int CPacketProc::DO_GAME_AOI_IN_PLAYERS_MOVE(CClient* pTarget, CPacket& pReqPacket)
+{
+	st_STC_AoiInPlayerMoves res;
+	pReqPacket >> res;
+	for (int i = 0; i < res.Loop1; ++i)
+	{
+		CAoiTestRecorder::Get().RecordOtherMoveStart(res.move[i].ID, res.move[i].pos, res.move[i].dir);
+		if (pTarget->GetID() == res.move[i].ID)
+		{
+			printf("이동 시작 잘못된 아이디 나의 아이디 를 받음\n");
+			continue;
+		}
+		CPacket logic;
+		logic << (int)ELOGIC_MSG::ELOGIC_MOVE_START_OTHER_PLAYER;
+		logic << res.move[i].ID << res.move[i].pos << res.move[i].dir;
+		pTarget->PushLogicPacket({ 2, logic });
+	}
 	return 0;
 }
