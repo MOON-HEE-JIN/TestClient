@@ -16,6 +16,7 @@ private:
 private:
 	virtual int DO_GAME_AOI_IN_PLAYER(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_AOI_IN_PLAYERS(Object* pTarget, Packet& pReqPacket) = 0;
+	virtual int DO_GAME_AOI_IN_PLAYERS_MOVE(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_AOI_OUT_PLAYER(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_AOI_OUT_PLAYERS(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_CHANGEINGZONE(Object* pTarget, Packet& pReqPacket) = 0;
@@ -24,6 +25,7 @@ private:
 	virtual int DO_GAME_LOOPBACK(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_MOVESTART(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_MOVESTOP(Object* pTarget, Packet& pReqPacket) = 0;
+	virtual int DO_GAME_OTHERMOVESTART(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_TELEPORT(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_OBSERVER_CONNET_OBSERVER(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_ERROR_PACKET(Object* pTarget, Packet& pReqPacket) = 0;

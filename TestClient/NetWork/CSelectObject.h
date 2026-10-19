@@ -9,19 +9,19 @@
 class CSelectObject
 {
 public:
-    CSelectObject();
+    CSelectObject(bool bMain = true);
     ~CSelectObject();
 
 private:
     char m_strIP[16];
 	unsigned short m_Port;
+    std::atomic<bool> m_bKeyLock;
 
 	CRingBuffer* m_recvBuffer;
 
 	CRITICAL_SECTION m_sendLock;
 protected:
     SOCKET m_socket;
-
 protected:
     int InitSocket();
 public:
@@ -42,4 +42,8 @@ public:
     virtual void OnRecv(int type, CPacket* pPacket) = 0;
     virtual void Update(float delta) {};
 	virtual void KeyProcess() {};
+
+    void LockKey() { m_bKeyLock.store(true); }
+    void UnLockKey() { m_bKeyLock.store(false); }
+    bool GetKeyLock() { return m_bKeyLock.load(); }
 };

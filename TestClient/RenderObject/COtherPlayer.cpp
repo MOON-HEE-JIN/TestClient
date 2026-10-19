@@ -1,4 +1,4 @@
-#include "COtherPlayer.h"
+﻿#include "COtherPlayer.h"
 
 COtherPlayer::COtherPlayer(int id, float x, float z)
 	: CWinObject(id, x, z, 12, RGB(236, 92, 86))

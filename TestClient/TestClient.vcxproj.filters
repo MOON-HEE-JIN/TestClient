@@ -30,6 +30,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AoiTestRecorder.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
     <ClInclude Include="CWinAPIThread.h" />
@@ -43,9 +46,6 @@
       <Filter>소스 파일\Stub</Filter>
     </ClInclude>
     <ClInclude Include="Stub\ProjectDefineStruct.h">
-      <Filter>소스 파일\Stub</Filter>
-    </ClInclude>
-    <ClInclude Include="Stub\Serialization.h">
       <Filter>소스 파일\Stub</Filter>
     </ClInclude>
     <ClInclude Include="Stub\StructDef.h">
@@ -69,9 +69,6 @@
     <ClInclude Include="NetWork\CBaseSelectNet.h">
       <Filter>소스 파일\NetWork</Filter>
     </ClInclude>
-    <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h">
-      <Filter>소스 파일\CUtill</Filter>
-    </ClInclude>
     <ClInclude Include="GameDefines.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -87,16 +84,28 @@
     <ClInclude Include="RenderObject\CPlayer.h">
       <Filter>소스 파일\RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="CUtill\CUtill.h">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClInclude>
+    <ClInclude Include="COtherClient.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\Serialization.h">
+      <Filter>소스 파일\Stub</Filter>
+    </ClInclude>
+    <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AoiTestRecorder.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="CMFCThread.cpp" />
     <ClCompile Include="CWinAPIThread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Stub\CLIENT_STUB.cpp">
-      <Filter>소스 파일\Stub</Filter>
-    </ClCompile>
-    <ClCompile Include="Stub\Serialization.cpp">
       <Filter>소스 파일\Stub</Filter>
     </ClCompile>
     <ClCompile Include="CPacketProc.cpp">
@@ -125,6 +134,15 @@
     </ClCompile>
     <ClCompile Include="RenderObject\CPlayer.cpp">
       <Filter>소스 파일\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CUtill\CUtill.cpp">
+      <Filter>소스 파일\CUtill</Filter>
+    </ClCompile>
+    <ClCompile Include="COtherClient.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Stub\Serialization.cpp">
+      <Filter>소스 파일\Stub</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

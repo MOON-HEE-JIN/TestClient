@@ -1,12 +1,16 @@
 ﻿#include "CSelectObject.h"
 
 
-CSelectObject::CSelectObject()
+CSelectObject::CSelectObject(bool bMain)
 {
-	InitSocket();
+	if (bMain)
+	{
+		InitSocket();
 
-	m_recvBuffer = new CRingBuffer();
-	InitializeCriticalSection(&m_sendLock);
+		m_recvBuffer = new CRingBuffer();
+		InitializeCriticalSection(&m_sendLock);
+		m_bKeyLock = false;
+	}
 }
 
 CSelectObject::~CSelectObject()
