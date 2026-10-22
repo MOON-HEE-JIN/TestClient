@@ -28,6 +28,12 @@
     <Filter Include="소스 파일\RenderObject">
       <UniqueIdentifier>{66028e87-1875-4f93-838a-32bd9f97d1fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Stub\Chat">
+      <UniqueIdentifier>{b7bad08d-d6d9-442b-bb20-5c00f61fc5f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Proc">
+      <UniqueIdentifier>{cfec4e60-f2dd-41ca-a4b4-4b2b386c5039}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AoiTestRecorder.h">
@@ -50,9 +56,6 @@
     </ClInclude>
     <ClInclude Include="Stub\StructDef.h">
       <Filter>소스 파일\Stub</Filter>
-    </ClInclude>
-    <ClInclude Include="CPacketProc.h">
-      <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="CUtill\CPacket.h">
       <Filter>소스 파일\CUtill</Filter>
@@ -96,6 +99,27 @@
     <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Stub\ChatClient.ClientToChatServerStub.g.h">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\ChatClient.EnumDef.g.h">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\ChatClient.PacketEnumDef.g.h">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\ChatClient.Serialization.g.h">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\ChatClient.StructDef.g.h">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="CPacketProc.h">
+      <Filter>소스 파일\Proc</Filter>
+    </ClInclude>
+    <ClInclude Include="CPacketChatProc.h">
+      <Filter>소스 파일\Proc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AoiTestRecorder.cpp">
@@ -107,9 +131,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Stub\CLIENT_STUB.cpp">
       <Filter>소스 파일\Stub</Filter>
-    </ClCompile>
-    <ClCompile Include="CPacketProc.cpp">
-      <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CUtill\CPacket.cpp">
       <Filter>소스 파일\CUtill</Filter>
@@ -143,6 +164,18 @@
     </ClCompile>
     <ClCompile Include="Stub\Serialization.cpp">
       <Filter>소스 파일\Stub</Filter>
+    </ClCompile>
+    <ClCompile Include="Stub\ChatClient.ClientToChatServerStub.g.cpp">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="Stub\ChatClient.Serialization.g.cpp">
+      <Filter>소스 파일\Stub\Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="CPacketProc.cpp">
+      <Filter>소스 파일\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="CPacketChatProc.cpp">
+      <Filter>소스 파일\Proc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

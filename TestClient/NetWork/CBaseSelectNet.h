@@ -8,6 +8,7 @@
 #include "CSelectObject.h"
 #include "NetWorkDefine.h"
 
+
 class CBaseSelectNet
 {
 public:
@@ -21,22 +22,20 @@ private:
 private:
 	std::atomic<bool> m_bRun;
 	SOCKET m_slisten;
-	HANDLE m_hAceeptThread;
 	HANDLE m_hWorkerThread;
 	unsigned short m_Port;
 
-	std::vector<CSelectObject*> m_vecSelectSocket;
+	CSelectObject* pSelectSocket;
+	std::vector<SOCKET> m_vecSocket;
 	int m_iMaxClients;
 
 private:
-	//static unsigned __stdcall AceeptThread(void* arg);		// accept() Thread
-	//virtual int AcceptRun();
 	static unsigned __stdcall WorkerThread(void* arg);		// recv, send Thread
 	virtual int WorkerRun();
 
 public:
 	// main 이 되는 소켓
-	CSelectObject* GetMainSocket() { return m_vecSelectSocket[ESOCKET_TYPE::ESOCKET_TYPE_MAIN_CLIENT]; }
+	CSelectObject* GetMainSocket() { return pSelectSocket; }
 	void StartServer(CBaseSelectNet* ptr, CSelectObject* pSelectObject);
 	void WaitStopServer();
 	void ServerShutDown();

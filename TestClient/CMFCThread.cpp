@@ -2,7 +2,10 @@
 #include <vector>
 
 #include "AoiTestRecorder.h"
+
 #include "./Stub/StructDef.h"
+#include "Stub/ChatClient.StructDef.g.h"
+
 #include "./NetWork/CBaseSelectNet.h"
 #include "CClient.h"
 
@@ -285,5 +288,17 @@ void PostCheatCommand(const CString& cmd)
             wprintf(L"[AOI TEST] Usage: aoitest save\n");
             wprintf(L"[AOI TEST] Result file: %ls\n", path.c_str());
         }
+    }
+    else if (command.CompareNoCase(_T("chat")) == 0)
+    {
+        CW2A converted(tokens[1].GetString(), CP_UTF8);
+        std::string utf8(converted);
+
+        Rpc::ChatClient::st_CTS_NORMAL SendMsg;
+        SendMsg.msg.MsgID = 0;
+        SendMsg.msg.Message.length = utf8.length();
+        SendMsg.msg.Message.msg = utf8;
+
+        g_SelectNet.GetMainSocket()->ChatSendPacket(SendMsg);
     }
 }

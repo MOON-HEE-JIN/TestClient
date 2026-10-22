@@ -16,6 +16,12 @@ enum ELOGIC_MSG
 	ELOGIC_MOVE_STOP_OTHER_PLAYER,
 };
 
+enum eKIND_SOCKET
+{
+	Game,
+	Chat,
+};
+
 constexpr int MAP_WIDTH = 1024;
 constexpr int MAP_HEIGHT = 1024;
 constexpr int TILE_SIZE = 64;
