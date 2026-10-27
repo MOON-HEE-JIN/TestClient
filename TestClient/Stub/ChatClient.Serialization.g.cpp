@@ -48,12 +48,13 @@ int Serialization (char* buffer, st_CTS_WHISPER& value)
 	return iSize;
 }
 
-int Serialization (char* buffer, st_Msg& value)
+int Serialization (char* buffer, st_Message& value)
 {
 	int iSize = 0;
-	memcpy(buffer + iSize, &value.MsgID, sizeof(value.MsgID));
-	iSize += sizeof(value.MsgID);
-	iSize += Serialization(buffer + iSize, value.Message);
+	memcpy(buffer + iSize, &value.length, sizeof(value.length));
+	iSize += sizeof(value.length);
+	memcpy(buffer + iSize, value.comment.c_str() , value.comment.length());
+	iSize += value.comment.length();
 	return iSize;
 }
 
@@ -100,16 +101,6 @@ int Serialization (char* buffer, st_STC_WHISPER& value)
 	return iSize;
 }
 
-int Serialization (char* buffer, st_String& value)
-{
-	int iSize = 0;
-	memcpy(buffer + iSize, &value.length, sizeof(value.length));
-	iSize += sizeof(value.length);
-	memcpy(buffer + iSize, value.msg.c_str() , value.msg.length());
-	iSize += value.msg.length();
-	return iSize;
-}
-
 int UnSerialization (char* buffer, st_CTS_GROUP& value)
 {
 	int iSize = 0;
@@ -135,12 +126,13 @@ int UnSerialization (char* buffer, st_CTS_WHISPER& value)
 	return iSize;
 }
 
-int UnSerialization (char* buffer, st_Msg& value)
+int UnSerialization (char* buffer, st_Message& value)
 {
 	int iSize = 0;
-	memcpy(&value.MsgID, buffer + iSize, sizeof(value.MsgID));
-	iSize += sizeof(value.MsgID);
-	iSize += UnSerialization(buffer + iSize, value.Message);
+	memcpy(&value.length, buffer + iSize, sizeof(value.length));
+	iSize += sizeof(value.length);
+	value.comment.assign(buffer + iSize, value.length);
+	iSize += value.length;
 	return iSize;
 }
 
@@ -166,16 +158,6 @@ int UnSerialization (char* buffer, st_STC_WHISPER& value)
 	memcpy(&value.whisper_ID, buffer + iSize, sizeof(value.whisper_ID));
 	iSize += sizeof(value.whisper_ID);
 	iSize += UnSerialization(buffer + iSize, value.msg);
-	return iSize;
-}
-
-int UnSerialization (char* buffer, st_String& value)
-{
-	int iSize = 0;
-	memcpy(&value.length, buffer + iSize, sizeof(value.length));
-	iSize += sizeof(value.length);
-	value.msg.assign(buffer + iSize, value.length);
-	iSize += value.length;
 	return iSize;
 }
 

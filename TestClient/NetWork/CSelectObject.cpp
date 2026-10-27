@@ -76,6 +76,7 @@ int CSelectObject::Connect(const char IP[16], unsigned short Port)
 int CSelectObject::ChatConnect(const char IP[16], unsigned short Port)
 {
 	//connect
+	SetConsoleOutputCP(CP_UTF8);
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;

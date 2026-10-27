@@ -295,10 +295,9 @@ void PostCheatCommand(const CString& cmd)
         std::string utf8(converted);
 
         Rpc::ChatClient::st_CTS_NORMAL SendMsg;
-        SendMsg.msg.MsgID = 0;
-        SendMsg.msg.Message.length = utf8.length();
-        SendMsg.msg.Message.msg = utf8;
-
+        SendMsg.msg.length = utf8.length();
+        SendMsg.msg.comment = utf8;
+        
         g_SelectNet.GetMainSocket()->ChatSendPacket(SendMsg);
     }
 }
