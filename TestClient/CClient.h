@@ -40,7 +40,7 @@ private:
     int m_size;
     int m_iSpeed;
 
-    CLockFreeQueue_SPSC<PROC_MSG> m_queue;
+    CLockFreeQueue_SPSC<PACKET_MSG> m_queue;
 	CLockFreeQueue_SPSC<PROC_MSG> m_logicqueue;
 
     // OtherPlayer 를 Client 안에 넣은 이유는 따로 관리하는 컨테이너 로 생성하면
@@ -67,7 +67,7 @@ private:
     void StopAutoMove();
     void FinishAutoAoiTest();
 public:
-	virtual void OnRecv(int type, CPacket* pPacket) override;
+	virtual void OnRecv(int sock, int type, CPacket* pPacket) override;
 	virtual void Update(float delta) override;
 	virtual void KeyProcess() override;
 

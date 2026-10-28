@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include "../Stub/Serialization.h"
+#include "../Stub/ChatClient.Serialization.g.h"
+
+using namespace Rpc::ChatClient;
 
 class CPacket
 {

@@ -138,6 +138,7 @@
     <ClInclude Include="CClient.h" />
     <ClInclude Include="CMFCThread.h" />
     <ClInclude Include="COtherClient.h" />
+    <ClInclude Include="CPacketChatProc.h" />
     <ClInclude Include="CPacketProc.h" />
     <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h" />
     <ClInclude Include="CUtill\CPacket.h" />
@@ -152,6 +153,11 @@
     <ClInclude Include="RenderObject\COtherPlayer.h" />
     <ClInclude Include="RenderObject\CPlayer.h" />
     <ClInclude Include="RenderObject\CWinObject.h" />
+    <ClInclude Include="Stub\ChatClient.ClientToChatServerStub.g.h" />
+    <ClInclude Include="Stub\ChatClient.EnumDef.g.h" />
+    <ClInclude Include="Stub\ChatClient.PacketEnumDef.g.h" />
+    <ClInclude Include="Stub\ChatClient.Serialization.g.h" />
+    <ClInclude Include="Stub\ChatClient.StructDef.g.h" />
     <ClInclude Include="Stub\CLIENT_STUB.h" />
     <ClInclude Include="Stub\EnumDef.h" />
     <ClInclude Include="Stub\PacketEnumDef.h" />
@@ -164,6 +170,7 @@
     <ClCompile Include="CClient.cpp" />
     <ClCompile Include="CMFCThread.cpp" />
     <ClCompile Include="COtherClient.cpp" />
+    <ClCompile Include="CPacketChatProc.cpp" />
     <ClCompile Include="CPacketProc.cpp" />
     <ClCompile Include="CUtill\CPacket.cpp" />
     <ClCompile Include="CUtill\CRingBuffer.cpp" />
@@ -176,6 +183,8 @@
     <ClCompile Include="RenderObject\COtherPlayer.cpp" />
     <ClCompile Include="RenderObject\CPlayer.cpp" />
     <ClCompile Include="RenderObject\CWinObject.cpp" />
+    <ClCompile Include="Stub\ChatClient.ClientToChatServerStub.g.cpp" />
+    <ClCompile Include="Stub\ChatClient.Serialization.g.cpp" />
     <ClCompile Include="Stub\CLIENT_STUB.cpp" />
     <ClCompile Include="Stub\Serialization.cpp" />
   </ItemGroup>

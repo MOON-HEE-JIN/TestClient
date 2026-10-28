@@ -18,18 +18,23 @@ private:
     std::atomic<bool> m_bKeyLock;
 
 	CRingBuffer* m_recvBuffer;
+    CRingBuffer* m_recvChatBuffer;
 
 	CRITICAL_SECTION m_sendLock;
 protected:
     SOCKET m_socket;
+    SOCKET m_chatsocket;
 protected:
     int InitSocket();
 public:
     int Connect(const char IP[16], unsigned short Port);
+    int ChatConnect(const char IP[16], unsigned short Port);
     void Disconnect();
 
 	SOCKET GetSocket() { return m_socket; }
+    SOCKET GetChatSocket() { return m_chatsocket; }
 	CRingBuffer* GetRecvBuffer() { return m_recvBuffer; }
+    CRingBuffer* GetRecvChatBuffer() { return m_recvChatBuffer; }
 public:
 	template<typename T>
     void SendPacket(T& packet)
@@ -38,8 +43,16 @@ public:
         sendPacket << packet;
         SendPacket(&sendPacket);
 	}
+    template<typename T>
+    void ChatSendPacket(T& packet)
+    {
+        CPacket sendPacket;
+        sendPacket << packet;
+        ChatSendPacket(&sendPacket);
+    }
     void SendPacket(CPacket* pPacket);
-    virtual void OnRecv(int type, CPacket* pPacket) = 0;
+    void ChatSendPacket(CPacket* pPacket);
+    virtual void OnRecv(int sock, int type, CPacket* pPacket) = 0;
     virtual void Update(float delta) {};
 	virtual void KeyProcess() {};
 

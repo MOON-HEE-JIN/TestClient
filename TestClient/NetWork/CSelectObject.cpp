@@ -8,6 +8,7 @@ CSelectObject::CSelectObject(bool bMain)
 		InitSocket();
 
 		m_recvBuffer = new CRingBuffer();
+		m_recvChatBuffer = new CRingBuffer();
 		InitializeCriticalSection(&m_sendLock);
 		m_bKeyLock = false;
 	}
@@ -34,8 +35,16 @@ int CSelectObject::InitSocket()
 		return error;
 	}
 
+	m_chatsocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (m_chatsocket == INVALID_SOCKET)
+	{
+		int error = WSAGetLastError();
+		return error;
+	}
+
 	u_long on = 1;
 	ioctlsocket(m_socket, FIONBIO, &on);
+	ioctlsocket(m_chatsocket, FIONBIO, &on);
 
 	return 0;
 }
@@ -64,9 +73,38 @@ int CSelectObject::Connect(const char IP[16], unsigned short Port)
 	return 0;
 }
 
+int CSelectObject::ChatConnect(const char IP[16], unsigned short Port)
+{
+	//connect
+	SetConsoleOutputCP(CP_UTF8);
+	SOCKADDR_IN serveraddr;
+	ZeroMemory(&serveraddr, sizeof(serveraddr));
+	serveraddr.sin_family = AF_INET;
+
+	inet_pton(AF_INET, IP, &serveraddr.sin_addr);
+
+	serveraddr.sin_port = htons(Port);
+
+	int retval = connect(m_chatsocket, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
+	if (retval == SOCKET_ERROR)
+	{
+		int error = WSAGetLastError();
+		return error;
+	}
+
+	memcpy(m_strIP, IP, 16);
+	
+	return 0;
+}
+
 void CSelectObject::SendPacket(CPacket* pPacket)
 {
 	//EnterCriticalSection(&m_sendLock);
 	send(m_socket, pPacket->GetBufferPtr(), pPacket->GetDataSize(), 0);
 	//LeaveCriticalSection(&m_sendLock);
+}
+
+void CSelectObject::ChatSendPacket(CPacket* pPacket)
+{
+	send(m_chatsocket, pPacket->GetBufferPtr(), pPacket->GetDataSize(), 0);
 }

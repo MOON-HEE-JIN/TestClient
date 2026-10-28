@@ -1,6 +1,7 @@
 ﻿#include "CClient.h"
 
 #include "CPacketProc.h"
+#include "CPacketChatProc.h"
 #include "AoiTestRecorder.h"
 #include "GameDefines.h"
 #include "CWinAPIThread.h"
@@ -8,6 +9,7 @@
 #include "CUtill/CUtill.h"
 
 static CPacketProc Proc;
+static CPacketChatProc ChatProc;
 
 std::atomic<bool> g_isTextInputFocused = false;
 
@@ -29,10 +31,18 @@ int CClient::GetSize() const noexcept { return m_size; }
 
 void CClient::ProcessPacket()
 {
-    PROC_MSG msg;
+    PACKET_MSG msg;
     while (m_queue.TryDequeue(msg))
     {
-        Proc.DO_GAME_Proc(msg.type, this, msg.packet);
+        switch (msg.sock)
+        {
+        case eKIND_SOCKET::Game:
+            Proc.DO_GAME_Proc(msg.job.type, this, msg.job.packet);
+            break;
+        case eKIND_SOCKET::Chat:
+            ChatProc.DO_CHAT_Proc(msg.job.type, this, msg.job.packet);
+            break;
+        }
 	}
 }
 
@@ -194,9 +204,9 @@ void CClient::ProcessOtherPlayer()
     }
 }
 
-void CClient::OnRecv(int type, CPacket* pPacket)
+void CClient::OnRecv(int sock, int type, CPacket* pPacket)
 {
-	m_queue.Enqueue(PROC_MSG(type, *pPacket));
+	m_queue.Enqueue(PACKET_MSG(sock, PROC_MSG(type, *pPacket)));
 }
 
 void CClient::Update(float delta)

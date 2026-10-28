@@ -104,6 +104,7 @@ int wmain(int argc, wchar_t* argv[])
     if (autoAoiTest)
         client.EnableAutoAoiTest(autoClientIndex, autoStartDelaySeconds);
     int ret = client.Connect("127.0.0.1", 7799);
+    ret = client.ChatConnect("127.0.0.1", 4499);
 	g_SelectNet.StartServer(&g_SelectNet, &client);
 
     g_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);

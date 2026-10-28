@@ -1,6 +1,7 @@
 ﻿#include "CBaseSelectNet.h"
 #include "../Stub/ProjectDefineStruct.h"
 #include "../CUtill/CPacket.h"
+#include "../GameDefines.h"
 
 #include <process.h>
 
@@ -9,6 +10,7 @@ CBaseSelectNet g_SelectNet;
 CBaseSelectNet::CBaseSelectNet()
 {
 	m_bRun.store(false);
+	pSelectSocket = nullptr;
 	m_slisten = INVALID_SOCKET;
 }
 
@@ -86,55 +88,77 @@ int CBaseSelectNet::WorkerRun()
 	FD_ZERO(&baseSet);
 
 	//FD_SET(m_slisten, &baseSet);
-	for (CSelectObject* pObj : m_vecSelectSocket)
+	if (pSelectSocket)
 	{
-		FD_SET(pObj->GetSocket(), &baseSet);
+		FD_SET(pSelectSocket->GetSocket(), &baseSet);
+		FD_SET(pSelectSocket->GetChatSocket(), &baseSet);
+
+		m_vecSocket.push_back(pSelectSocket->GetSocket());
+		m_vecSocket.push_back(pSelectSocket->GetChatSocket());
 	}
 
 	FD_SET rSet;
 	memcpy(&rSet, &baseSet, sizeof(FD_SET));
 
 	int ret;
+	int socketcount = m_vecSocket.size();
 	while (m_bRun.load())
 	{
 		timeval timeout{ 0, 100 * 1000 };
 		ret = select(0, &rSet, NULL, NULL, &timeout);
 		if (ret > 0)
 		{
-			int Loop = m_vecSelectSocket.size();
+			int Loop = socketcount;
 			for (int i = 0; i < Loop; i++)
 			{
 
-				if (!FD_ISSET(m_vecSelectSocket[i]->GetSocket(), &rSet))
+				if (!FD_ISSET(m_vecSocket[i], &rSet))
 					continue;
 
 				char buff[4096];
 				ZeroMemory(buff, sizeof(buff));
 
-				int recvRet = recv(m_vecSelectSocket[i]->GetSocket(), buff, sizeof(buff), 0);
+				int recvRet = recv(m_vecSocket[i], buff, sizeof(buff), 0);
 				if (recvRet <= 0)
 				{
 					// 종료 처리
 					continue;
 				}
-				m_vecSelectSocket[i]->GetRecvBuffer()->Enqueue(buff, recvRet);
+
+				CRingBuffer* pBuffer = nullptr;
+				int sock = 0;
+				if (m_vecSocket[i] == pSelectSocket->GetSocket())
+				{
+					pBuffer = pSelectSocket->GetRecvBuffer();
+					sock = eKIND_SOCKET::Game;
+				}
+				else if (m_vecSocket[i] == pSelectSocket->GetChatSocket())
+				{
+					pBuffer = pSelectSocket->GetRecvChatBuffer();
+					sock = eKIND_SOCKET::Chat;
+				}
+				else
+					exit(1);
+
+				pBuffer->Enqueue(buff, recvRet);
+
 				while (1)
 				{
-					if (sizeof(st_Header) > m_vecSelectSocket[i]->GetRecvBuffer()->GetUseSize())
+					if (sizeof(st_Header) > pBuffer->GetUseSize())
 						break;
 
 					st_Header header;
-					m_vecSelectSocket[i]->GetRecvBuffer()->Peek((char*)&header, sizeof(st_Header));
+					pBuffer->Peek((char*)&header, sizeof(st_Header));
 
-					if (sizeof(st_Header) + header.size > m_vecSelectSocket[i]->GetRecvBuffer()->GetUseSize())
+					if (sizeof(st_Header) + header.size > pBuffer->GetUseSize())
 						break;
 
 					CPacket cPacket;
-					m_vecSelectSocket[i]->GetRecvBuffer()->MoveReadPointer(sizeof(st_Header));
-					m_vecSelectSocket[i]->GetRecvBuffer()->Dequeue(cPacket.GetBufferPtr(), header.size);
+					pBuffer->MoveReadPointer(sizeof(st_Header));
+					pBuffer->Dequeue(cPacket.GetBufferPtr(), header.size);
 					cPacket.MoveWritePos(header.size);
 
-					m_vecSelectSocket[i]->OnRecv(header.type, &cPacket);
+					pSelectSocket->OnRecv(sock, header.type, &cPacket);
 				}
 			}
 		}
@@ -150,7 +174,7 @@ void CBaseSelectNet::StartServer(CBaseSelectNet* ptr, CSelectObject* pSelectObje
 		return;
 
 	m_bRun.store(true);
-	m_vecSelectSocket.push_back(pSelectObject);
+	pSelectSocket = pSelectObject;
 	m_hWorkerThread = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, ptr, 0, NULL);
 }
 
@@ -169,10 +193,11 @@ void CBaseSelectNet::ServerShutDown()
 	if (!m_bRun.exchange(false))
 		return;
 
-	// select()를 즉시 깨워 WorkerThread가 종료 조건을 확인하게 한다.
-	for (CSelectObject* pObject : m_vecSelectSocket)
+	
+	if (pSelectSocket != nullptr && pSelectSocket->GetSocket() != INVALID_SOCKET)
 	{
-		if (pObject != nullptr && pObject->GetSocket() != INVALID_SOCKET)
-			shutdown(pObject->GetSocket(), SD_BOTH);
+		shutdown(pSelectSocket->GetSocket(), SD_BOTH);
+		shutdown(pSelectSocket->GetChatSocket(), SD_BOTH);
 	}
+	
 }
