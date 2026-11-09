@@ -32,6 +32,7 @@ private:
         Finished
     };
 
+	int m_UniqueID;
     int m_iID;
     st_Vector3F m_pos;
     st_Vector3F m_dir;
@@ -71,6 +72,7 @@ public:
 	virtual void Update(float delta) override;
 	virtual void KeyProcess() override;
 
+	bool Login(const std::string _Id, const std::string _Password);
 public:
     void PushLogicPacket(PROC_MSG&& msg)
     {

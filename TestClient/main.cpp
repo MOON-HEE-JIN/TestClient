@@ -2,6 +2,9 @@
 
 #include <process.h>
 #include <chrono>
+#include <cstdio>
+#include <string>
+#include "Http/CHttpClient.h"
 
 #include "CWinAPIThread.h"
 #include "CMFCThread.h"
@@ -54,6 +57,7 @@ unsigned __stdcall LogicThread(void*)
     return 0;
 }
 
+
 int wmain(int argc, wchar_t* argv[])
 {
     /*
@@ -100,6 +104,14 @@ int wmain(int argc, wchar_t* argv[])
     }
 
 	CClient client;
+
+	if (!client.Login("test_account", "test_password"))
+	{
+		std::fprintf(stderr, "Failed to login to the game server.\n");
+        exit(1);
+	}
+
+
     CAoiTestRecorder::Get().SetLocalPosition(client.GetPos());
     if (autoAoiTest)
         client.EnableAutoAoiTest(autoClientIndex, autoStartDelaySeconds);

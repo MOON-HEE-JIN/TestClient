@@ -8,6 +8,8 @@
 #include "COtherClient.h"
 #include "CUtill/CUtill.h"
 
+#include "Http/CHttpClient.h"
+
 static CPacketProc Proc;
 static CPacketChatProc ChatProc;
 
@@ -435,5 +437,20 @@ void CClient::KeyProcess()
         m_dir = newDir;
         //Move(newDir.X * speed, newDir.Y * speed, 0, 0, 100, 100);
     }
+}
+
+bool CClient::Login(const std::string _Id, const std::string _Password)
+{
+    CHttpClient httpClient("http://127.0.0.1:5080");
+    httpClient.Init();
+
+    const auto loginResult = httpClient.Login(_Id, _Password);
+    if (!loginResult.IsSuccess())
+    {
+        return false;
+    }
+    m_UniqueID = loginResult.tokenValue;
+    
+    return true;
 }
 
