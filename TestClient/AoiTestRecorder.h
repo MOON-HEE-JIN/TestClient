@@ -1,12 +1,13 @@
-#pragma once
+﻿#pragma once
 
-#include "Stub/StructDef.h"
-
+#include "./Stub/GameClient.StructDef.g.h"
 #include <chrono>
 #include <fstream>
 #include <map>
 #include <mutex>
 #include <string>
+
+using namespace Rpc::GameClient;
 
 class CAoiTestRecorder
 {

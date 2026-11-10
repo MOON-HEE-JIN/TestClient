@@ -116,11 +116,36 @@ int wmain(int argc, wchar_t* argv[])
     if (autoAoiTest)
         client.EnableAutoAoiTest(autoClientIndex, autoStartDelaySeconds);
     int ret = client.Connect("127.0.0.1", 7799);
+	if (ret != 0)
+	{
+		std::fprintf(stderr, "Failed to connect to the game server. Error code: %d\n", ret);
+		//exit(1);
+	}
     ret = client.ChatConnect("127.0.0.1", 4499);
+	if (ret != 0)
+	{
+		std::fprintf(stderr, "Failed to connect to the chat server. Error code: %d\n", ret);
+		//exit(1);
+	}
 	g_SelectNet.StartServer(&g_SelectNet, &client);
 
     g_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	HANDLE hLogicThread = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, LogicThread, nullptr, 0, nullptr));
+
+    {
+		// Worker Thread 가 시작되기 전에 로그인 패킷을 보내기 위해 잠시 대기
+		Sleep(777);
+
+        //Auth
+        st_CTS_AuthCode req;
+        req.ID.comment = client.GetAccountId();
+        req.ID.length = req.ID.comment.length();
+        req.Password.comment = client.GetAccountPassword();
+        req.Password.length = req.Password.comment.length();
+        req.token = client.GetUniqueID();
+
+        client.SendPacket(req);
+    }
 
     if (autoAoiTest)
     {

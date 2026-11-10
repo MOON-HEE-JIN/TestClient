@@ -61,7 +61,7 @@ int CSelectObject::Connect(const char IP[16], unsigned short Port)
 	serveraddr.sin_port = htons(Port);
 
 	int retval = connect(m_socket, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
-	if (retval == SOCKET_ERROR)
+	if (retval == SOCKET_ERROR && retval != WSAEWOULDBLOCK)
 	{
 		int error = WSAGetLastError();
 		return error;

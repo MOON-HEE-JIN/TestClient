@@ -168,12 +168,12 @@
     <ClInclude Include="Stub\ChatClient.PacketEnumDef.g.h" />
     <ClInclude Include="Stub\ChatClient.Serialization.g.h" />
     <ClInclude Include="Stub\ChatClient.StructDef.g.h" />
-    <ClInclude Include="Stub\CLIENT_STUB.h" />
-    <ClInclude Include="Stub\EnumDef.h" />
-    <ClInclude Include="Stub\PacketEnumDef.h" />
+    <ClInclude Include="Stub\GameClient.EnumDef.g.h" />
+    <ClInclude Include="Stub\GameClient.GameServerToClientStub.g.h" />
+    <ClInclude Include="Stub\GameClient.PacketEnumDef.g.h" />
+    <ClInclude Include="Stub\GameClient.Serialization.g.h" />
+    <ClInclude Include="Stub\GameClient.StructDef.g.h" />
     <ClInclude Include="Stub\ProjectDefineStruct.h" />
-    <ClInclude Include="Stub\Serialization.h" />
-    <ClInclude Include="Stub\StructDef.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AoiTestRecorder.cpp" />
@@ -196,20 +196,16 @@
     <ClCompile Include="RenderObject\CWinObject.cpp" />
     <ClCompile Include="Stub\ChatClient.ClientToChatServerStub.g.cpp" />
     <ClCompile Include="Stub\ChatClient.Serialization.g.cpp" />
-    <ClCompile Include="Stub\CLIENT_STUB.cpp" />
-    <ClCompile Include="Stub\Serialization.cpp" />
+    <ClCompile Include="Stub\GameClient.GameServerToClientStub.g.cpp" />
+    <ClCompile Include="Stub\GameClient.Serialization.g.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <Target Name="GenerateCurlImportLibrary" BeforeTargets="Link"
-          Condition="'$(Platform)'=='x64'"
-          Inputs="$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.def;$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.dll"
-          Outputs="$(MSBuildProjectDirectory)\ThirdParty\curl\lib\libcurl-msvc.lib">
+  <Target Name="GenerateCurlImportLibrary" BeforeTargets="Link" Condition="'$(Platform)'=='x64'" Inputs="$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.def;$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.dll" Outputs="$(MSBuildProjectDirectory)\ThirdParty\curl\lib\libcurl-msvc.lib">
     <Exec Command="&quot;$(VCToolsInstallDir)bin\Hostx64\x64\lib.exe&quot; /nologo /machine:x64 /name:libcurl-x64.dll /def:&quot;$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.def&quot; /out:&quot;$(MSBuildProjectDirectory)\ThirdParty\curl\lib\libcurl-msvc.lib&quot;" />
   </Target>
   <Target Name="CopyCurlRuntime" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.dll"
-          DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\ThirdParty\curl\bin\libcurl-x64.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
 </Project>

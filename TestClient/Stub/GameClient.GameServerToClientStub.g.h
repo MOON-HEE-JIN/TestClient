@@ -2,11 +2,15 @@
 
 #include <map>
 #include <functional> 
+
+namespace Rpc::GameClient
+{
+
 template<typename Object, typename Packet>
-class Stub
+class GameServerToClientStub
 {
 public:
-	Stub(){InitRegisterFuncPointer();}
+	GameServerToClientStub(){InitRegisterFuncPointer();}
 	virtual void DO_GAME_Proc(int type, Object* pTarget, Packet& cPacket);
 	virtual void DO_OBSERVER_Proc(int type, Object* pTarget, Packet& cPacket);
 private:
@@ -19,6 +23,7 @@ private:
 	virtual int DO_GAME_AOI_IN_PLAYERS_MOVE(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_AOI_OUT_PLAYER(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_AOI_OUT_PLAYERS(Object* pTarget, Packet& pReqPacket) = 0;
+	virtual int DO_GAME_AUTHCODE(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_CHANGEINGZONE(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_CHANGEZONE(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_CONNECTINFO(Object* pTarget, Packet& pReqPacket) = 0;
@@ -27,8 +32,9 @@ private:
 	virtual int DO_GAME_MOVESTOP(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_OTHERMOVESTART(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_GAME_TELEPORT(Object* pTarget, Packet& pReqPacket) = 0;
-	virtual int DO_OBSERVER_CONNET_OBSERVER(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_ERROR_PACKET(Object* pTarget, Packet& pReqPacket) = 0;
 	virtual int DO_ERROR_RESULT(Object* pTarget, int ret, int type) = 0;
 
 };
+
+} // namespace Rpc::GameClient

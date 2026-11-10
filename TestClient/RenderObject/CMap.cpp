@@ -65,6 +65,24 @@ void CMap::Render(HDC hdc, const RECT& mapRect)
 
 	SelectObject(hdc, oldPen);
 	DeleteObject(gridPen);
+
+	// Draw management Grid boundaries over the Tile lines.
+	HPEN managementGridPen = CreatePen(PS_SOLID, 2, RGB(150, 150, 170));
+	oldPen = SelectObject(hdc, managementGridPen);
+	for (int x = 1; x < GRID_COUNT_X; ++x)
+	{
+		const int screenX = mapRect.left + ((mapRect.right - mapRect.left) * x / GRID_COUNT_X);
+		MoveToEx(hdc, screenX, mapRect.top, nullptr);
+		LineTo(hdc, screenX, mapRect.bottom);
+	}
+	for (int y = 1; y < GRID_COUNT_Y; ++y)
+	{
+		const int screenY = mapRect.top + ((mapRect.bottom - mapRect.top) * y / GRID_COUNT_Y);
+		MoveToEx(hdc, mapRect.left, screenY, nullptr);
+		LineTo(hdc, mapRect.right, screenY);
+	}
+	SelectObject(hdc, oldPen);
+	DeleteObject(managementGridPen);
 }
 
 int CMap::ClampTile(int tile, int maxTile) const noexcept

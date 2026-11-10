@@ -449,6 +449,8 @@ bool CClient::Login(const std::string _Id, const std::string _Password)
     {
         return false;
     }
+	m_accountId = _Id;
+	m_accountPassword = _Password;
     m_UniqueID = loginResult.tokenValue;
     
     return true;

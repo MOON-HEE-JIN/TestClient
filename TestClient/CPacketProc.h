@@ -1,15 +1,17 @@
 ﻿#pragma once
 
-#include "Stub/CLIENT_STUB.h"
-#include "Stub/CLIENT_STUB.cpp"
+#include "Stub/GameClient.GameServerToClientStub.g.h"
+#include "Stub/GameClient.GameServerToClientStub.g.cpp"
 
 #include "CClient.h"
 #include "CUtill/CPacket.h"
-#include "Stub/PacketEnumDef.h"
+#include "Stub/GameClient.PacketEnumDef.g.h"
+
+using namespace Rpc::GameClient;
 
 class CClient;
 
-class CPacketProc : public Stub<CClient, CPacket>
+class CPacketProc : public GameServerToClientStub<CClient, CPacket>
 {
 public:
 	CPacketProc() {};
@@ -31,9 +33,6 @@ private:
 	int DO_GAME_MOVESTOP(CClient* pTarget, CPacket& pReqPacket) override;
 
 	// Stub을(를) 통해 상속됨
-	int DO_OBSERVER_CONNET_OBSERVER(CClient* pTarget, CPacket& pReqPacket) override;
-
-	// Stub을(를) 통해 상속됨
 	int DO_GAME_CHANGEINGZONE(CClient* pTarget, CPacket& pReqPacket) override;
 
 	// Stub을(를) 통해 상속됨
@@ -50,4 +49,7 @@ private:
 
 	// Stub을(를) 통해 상속됨
 	int DO_GAME_AOI_IN_PLAYERS_MOVE(CClient* pTarget, CPacket& pReqPacket) override;
+
+	// GameServerToClientStub을(를) 통해 상속됨
+	int DO_GAME_AUTHCODE(CClient* pTarget, CPacket& pReqPacket) override;
 };

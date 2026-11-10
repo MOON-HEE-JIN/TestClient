@@ -1,5 +1,5 @@
 ﻿#include "CPacketProc.h"
-#include "Stub/EnumDef.h"
+#include "Stub/GameClient.PacketEnumDef.g.h"
 #include "AoiTestRecorder.h"
 #include "CWinAPIThread.h"
 #include "GameDefines.h"
@@ -117,11 +117,6 @@ int CPacketProc::DO_GAME_MOVESTOP(CClient* pTarget, CPacket& pReqPacket)
 	
 	EnqueueEntity(res.ID, res.pos.X, res.pos.Z);
 
-	return 0;
-}
-
-int CPacketProc::DO_OBSERVER_CONNET_OBSERVER(CClient* pTarget, CPacket& pReqPacket)
-{
 	return 0;
 }
 
@@ -301,5 +296,10 @@ int CPacketProc::DO_GAME_AOI_IN_PLAYERS_MOVE(CClient* pTarget, CPacket& pReqPack
 		logic << res.move[i].ID << res.move[i].pos << res.move[i].dir;
 		pTarget->PushLogicPacket({ 2, logic });
 	}
+	return 0;
+}
+
+int CPacketProc::DO_GAME_AUTHCODE(CClient* pTarget, CPacket& pReqPacket)
+{
 	return 0;
 }

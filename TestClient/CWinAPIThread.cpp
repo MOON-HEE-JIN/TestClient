@@ -244,7 +244,9 @@ namespace
         y += 28;
         DrawTextLine(hdc, x, y, L"Map: 1024 x 1024");
         y += 20;
-        DrawTextLine(hdc, x, y, L"Tile: 64 / Grid: 16 x 16");
+        DrawTextLine(hdc, x, y, L"Tiles: " + std::to_wstring(TILE_COUNT_X) + L" x " + std::to_wstring(TILE_COUNT_Y) + L" / Size: " + std::to_wstring(TILE_SIZE));
+        y += 20;
+        DrawTextLine(hdc, x, y, L"Grids: " + std::to_wstring(GRID_COUNT_X) + L" x " + std::to_wstring(GRID_COUNT_Y) + L" / Tiles: " + std::to_wstring(TILE_COUNT_X / GRID_COUNT_X) + L" x " + std::to_wstring(TILE_COUNT_Y / GRID_COUNT_Y));
         y += 20;
         DrawTextLine(hdc, x, y, L"Layer: Map / Other / Player");
         y += 32;
@@ -253,6 +255,8 @@ namespace
         DrawTextLine(hdc, x, y, L"Pos: " + std::to_wstring(static_cast<int>(g_player->GetX())) + L", " + std::to_wstring(static_cast<int>(g_player->GetZ())));
         y += 20;
         DrawTextLine(hdc, x, y, L"Tile: " + std::to_wstring(tileX) + L", " + std::to_wstring(tileY));
+        y += 20;
+        DrawTextLine(hdc, x, y, L"Grid ID: " + std::to_wstring(GridIDFromTile(tileX, tileY)));
         y += 20;
         DrawTextLine(hdc, x, y, L"Other: " + std::to_wstring(g_otherPlayers.size()));
 
