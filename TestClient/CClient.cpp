@@ -441,7 +441,17 @@ void CClient::KeyProcess()
 
 bool CClient::Login(const std::string _Id, const std::string _Password)
 {
+#ifdef __DEBUG__
+#if __CONNECT_LOGIN_DOCKER__
+    CHttpClient httpClient("https://127.0.0.1:15080");
+#else
     CHttpClient httpClient("http://127.0.0.1:5080");
+#endif
+#else
+	// 로그인 서버에 HTTP 요청을 보내서 토큰을 받아온다
+    CHttpClient httpClient("https://127.0.0.1:15080");
+#endif // __DEBUG__
+
     httpClient.Init();
 
     const auto loginResult = httpClient.Login(_Id, _Password);

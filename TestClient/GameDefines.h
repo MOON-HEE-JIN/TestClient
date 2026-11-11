@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define __CONNECT_LOGIN_DOCKER__ 1
+
 enum EACTION
 {
 	EACTION_IDLE,

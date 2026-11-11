@@ -5,6 +5,7 @@
 #include <chrono>
 #include <memory>
 #include <stdexcept>
+#include "../GameDefines.h"
 
 namespace
 {
@@ -64,6 +65,15 @@ st_ClientLoginResult CHttpClient::Login(
     std::string responseBody;
 
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
+
+#ifdef __DEBUG__
+#if __CONNECT_LOGIN_DOCKER__
+    curl_easy_setopt(curl.get(), CURLOPT_CAINFO, R"(F:\certs\loginserver.crt)");
+#endif
+#else
+    curl_easy_setopt(curl.get(), CURLOPT_CAINFO, R"(F:\certs\loginserver.crt)");
+#endif __DEBUG__
+
     curl_easy_setopt(curl.get(), CURLOPT_PROTOCOLS_STR, "http,https");
     curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
     curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headers.get());
