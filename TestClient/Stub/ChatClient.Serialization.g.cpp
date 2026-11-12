@@ -5,6 +5,22 @@
 namespace Rpc::ChatClient
 {
 
+int Serialization (char* buffer, st_CTS_ChatAuth& value)
+{
+	int hSize = 0;
+	st_Header header;
+	int iSize = sizeof(st_Header);
+	iSize += Serialization(buffer + iSize, value.ID);
+	iSize += Serialization(buffer + iSize, value.Password);
+	memcpy(buffer + iSize, &value.token, sizeof(value.token));
+	iSize += sizeof(value.token);
+
+	header.type = CHAT::CHATAUTH;
+	header.size = iSize - sizeof(st_Header);
+	memcpy(buffer, &header, sizeof(st_Header));
+	return iSize;
+}
+
 int Serialization (char* buffer, st_CTS_GROUP& value)
 {
 	int hSize = 0;
@@ -58,6 +74,20 @@ int Serialization (char* buffer, st_Message& value)
 	return iSize;
 }
 
+int Serialization (char* buffer, st_STC_ChatAuth& value)
+{
+	int hSize = 0;
+	st_Header header;
+	int iSize = sizeof(st_Header);
+	memcpy(buffer + iSize, &value.ret, sizeof(value.ret));
+	iSize += sizeof(value.ret);
+
+	header.type = CHAT::CHATAUTH;
+	header.size = iSize - sizeof(st_Header);
+	memcpy(buffer, &header, sizeof(st_Header));
+	return iSize;
+}
+
 int Serialization (char* buffer, st_STC_GROUP& value)
 {
 	int hSize = 0;
@@ -101,6 +131,16 @@ int Serialization (char* buffer, st_STC_WHISPER& value)
 	return iSize;
 }
 
+int UnSerialization (char* buffer, st_CTS_ChatAuth& value)
+{
+	int iSize = 0;
+	iSize += UnSerialization(buffer + iSize, value.ID);
+	iSize += UnSerialization(buffer + iSize, value.Password);
+	memcpy(&value.token, buffer + iSize, sizeof(value.token));
+	iSize += sizeof(value.token);
+	return iSize;
+}
+
 int UnSerialization (char* buffer, st_CTS_GROUP& value)
 {
 	int iSize = 0;
@@ -133,6 +173,14 @@ int UnSerialization (char* buffer, st_Message& value)
 	iSize += sizeof(value.length);
 	value.comment.assign(buffer + iSize, value.length);
 	iSize += value.length;
+	return iSize;
+}
+
+int UnSerialization (char* buffer, st_STC_ChatAuth& value)
+{
+	int iSize = 0;
+	memcpy(&value.ret, buffer + iSize, sizeof(value.ret));
+	iSize += sizeof(value.ret);
 	return iSize;
 }
 

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define __CONNECT_LOGIN_DOCKER__ 1
+
 enum EACTION
 {
 	EACTION_IDLE,
@@ -27,7 +29,16 @@ constexpr int MAP_HEIGHT = 1024;
 constexpr int TILE_SIZE = 64;
 constexpr int TILE_COUNT_X = MAP_WIDTH / TILE_SIZE;
 constexpr int TILE_COUNT_Y = MAP_HEIGHT / TILE_SIZE;
-constexpr int GRID_COUNT = 4;
+constexpr int GRID_COUNT_X = 4;
+constexpr int GRID_COUNT_Y = 4; // World Z axis
+constexpr int GRID_COUNT = GRID_COUNT_X * GRID_COUNT_Y;
+
+constexpr int GridIDFromTile(int tileX, int tileY) noexcept
+{
+    const int gridX = (tileX * GRID_COUNT_X) / TILE_COUNT_X;
+    const int gridY = (tileY * GRID_COUNT_Y) / TILE_COUNT_Y;
+    return gridY * GRID_COUNT_X + gridX;
+}
 constexpr int PLAYER_SIZE = 20;
 constexpr int AOI_TILE_RADIUS = 1;
 

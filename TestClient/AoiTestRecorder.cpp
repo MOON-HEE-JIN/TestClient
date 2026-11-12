@@ -679,7 +679,7 @@ int CAoiTestRecorder::TileZ(const st_Vector3F& pos)
 
 int CAoiTestRecorder::GridID(const st_Vector3F& pos)
 {
-    return (TileZ(pos) * GRID_COUNT) / TILE_COUNT_Y;
+    return GridIDFromTile(TileX(pos), TileZ(pos));
 }
 
 void CAoiTestRecorder::LogEventLocked(const std::string& event)
@@ -796,12 +796,12 @@ void CAoiTestRecorder::WriteReportLocked(bool finalReport)
         << std::fixed << std::setprecision(3) << m_maxGridSampleGapMs << "\n";
     m_stream << "  4.3 Authoritative MoveStop after crossing=" << m_completedGridMoveSessions << "\n";
     m_stream << "  4.4 Authoritative position failures after crossing=" << m_gridPositionFailures << "\n";
-    m_stream << "  Grid boundaries are Z=256, 512, 768 (Tile rows 4, 8, 12).\n\n";
+    m_stream << "  Grid layout: 4 x 4, 4 x 4 Tiles per Grid. Boundaries: X/Z=256, 512, 768 (Tile columns/rows 4, 8, 12).\n\n";
 
     m_stream << "Execution guidance\n";
     m_stream << "  - Use another client/player in the same zone so remote movement packets are observable.\n";
     m_stream << "  - Cross Tile boundaries at multiples of 64 in X or Z and verify AOI enter/leave.\n";
-    m_stream << "  - Cross Grid boundaries at Z=256, 512, or 768 while continuously moving.\n";
+    m_stream << "  - Cross Grid boundaries at X or Z=256, 512, or 768 while continuously moving.\n";
     m_stream << "  - Stop after each crossing so the authoritative server position can be compared.\n";
     m_stream << "  - NOT TESTED means the required packet/boundary sequence was not observed; it is not a pass.\n";
     m_stream << "============================================================\n";

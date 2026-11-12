@@ -40,3 +40,14 @@ int CPacketChatProc::DO_ERROR_RESULT(CClient* pTarget, int ret, int type)
 {
     return 0;
 }
+
+int CPacketChatProc::DO_CHAT_CHATAUTH(CClient* pTarget, CPacket& pReqPacket)
+{
+    st_STC_ChatAuth res;
+    pReqPacket >> res;
+
+    if (res.ret != 0)
+        printf("Chat Auth Error\n");
+
+    return 0;
+}

@@ -3,7 +3,7 @@
 
 #include "AoiTestRecorder.h"
 
-#include "./Stub/StructDef.h"
+#include "Stub/GameClient.StructDef.g.h"
 #include "Stub/ChatClient.StructDef.g.h"
 
 #include "./NetWork/CBaseSelectNet.h"
@@ -226,19 +226,6 @@ void PostCheatCommand(const CString& cmd)
     {
 		CT2A convert(command);
 		const char* cmdStr = convert.m_psz;
-    }
-    else if (command.CompareNoCase(_T("changezone")) == 0)
-    {
-        if (tokens.size() < 3)
-            return;
-		int channel = _ttoi(tokens[1]);
-		int zoneid = _ttoi(tokens[2]);
-
-        st_CTS_ChangeZone req;
-		req.channel = channel;
-		req.zone = zoneid;
-
-		g_SelectNet.GetMainSocket()->SendPacket(req);
     }
     else if (command.CompareNoCase(_T("teleport")) == 0)
     {

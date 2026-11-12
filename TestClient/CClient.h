@@ -32,6 +32,10 @@ private:
         Finished
     };
 
+	std::string m_accountId;
+	std::string m_accountPassword;
+	int m_UniqueID;
+
     int m_iID;
     st_Vector3F m_pos;
     st_Vector3F m_dir;
@@ -71,12 +75,16 @@ public:
 	virtual void Update(float delta) override;
 	virtual void KeyProcess() override;
 
+	bool Login(const std::string _Id, const std::string _Password);
 public:
     void PushLogicPacket(PROC_MSG&& msg)
     {
         m_logicqueue.Enqueue(std::move(msg));
 	}
 
+	std::string GetAccountId() const { return m_accountId; }
+	std::string GetAccountPassword() const { return m_accountPassword; }
+	__int64 GetUniqueID() const { return m_UniqueID; }
     void SetID(int id) { m_iID = id; }
     int GetID() { return m_iID; }
     st_Vector3F GetPos() const { return m_pos; }    

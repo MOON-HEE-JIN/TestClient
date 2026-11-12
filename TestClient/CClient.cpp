@@ -8,6 +8,8 @@
 #include "COtherClient.h"
 #include "CUtill/CUtill.h"
 
+#include "Http/CHttpClient.h"
+
 static CPacketProc Proc;
 static CPacketChatProc ChatProc;
 
@@ -435,5 +437,32 @@ void CClient::KeyProcess()
         m_dir = newDir;
         //Move(newDir.X * speed, newDir.Y * speed, 0, 0, 100, 100);
     }
+}
+
+bool CClient::Login(const std::string _Id, const std::string _Password)
+{
+#ifdef __DEBUG__
+#if __CONNECT_LOGIN_DOCKER__
+    CHttpClient httpClient("https://127.0.0.1:15080");
+#else
+    CHttpClient httpClient("http://127.0.0.1:5080");
+#endif
+#else
+	// 로그인 서버에 HTTP 요청을 보내서 토큰을 받아온다
+    CHttpClient httpClient("https://127.0.0.1:15080");
+#endif // __DEBUG__
+
+    httpClient.Init();
+
+    const auto loginResult = httpClient.Login(_Id, _Password);
+    if (!loginResult.IsSuccess())
+    {
+        return false;
+    }
+	m_accountId = _Id;
+	m_accountPassword = _Password;
+    m_UniqueID = loginResult.tokenValue;
+    
+    return true;
 }
 

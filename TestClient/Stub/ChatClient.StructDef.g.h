@@ -11,6 +11,12 @@ struct st_Message
 	__int16		length;
 	std::string		comment;
 };
+struct st_CTS_ChatAuth
+{
+	st_Message		ID;
+	st_Message		Password;
+	__int64		token;
+};
 struct st_CTS_GROUP
 {
 	__int32		group_ID;
@@ -24,6 +30,10 @@ struct st_CTS_WHISPER
 {
 	__int32		whisper_ID;
 	st_Message		msg;
+};
+struct st_STC_ChatAuth
+{
+	__int32		ret;
 };
 struct st_STC_GROUP
 {
