@@ -88,9 +88,6 @@
     <ClInclude Include="CUtill\CLockFreeQueue_SPSC.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Stub\ChatClient.ClientToChatServerStub.g.h">
-      <Filter>소스 파일\Stub\Chat</Filter>
-    </ClInclude>
     <ClInclude Include="Stub\ChatClient.EnumDef.g.h">
       <Filter>소스 파일\Stub\Chat</Filter>
     </ClInclude>
@@ -123,6 +120,9 @@
     </ClInclude>
     <ClInclude Include="Stub\GameClient.StructDef.g.h">
       <Filter>소스 파일\Stub\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Stub\ChatClient.ChatServerToClientStub.g.h">
+      <Filter>소스 파일\Stub\Chat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +164,6 @@
     <ClCompile Include="COtherClient.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Stub\ChatClient.ClientToChatServerStub.g.cpp">
-      <Filter>소스 파일\Stub\Chat</Filter>
-    </ClCompile>
     <ClCompile Include="Stub\ChatClient.Serialization.g.cpp">
       <Filter>소스 파일\Stub\Chat</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="Stub\GameClient.Serialization.g.cpp">
       <Filter>소스 파일\Stub\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Stub\ChatClient.ChatServerToClientStub.g.cpp">
+      <Filter>소스 파일\Stub\Chat</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

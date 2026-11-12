@@ -7,6 +7,7 @@ namespace CHAT
  {
 	enum CHAT
 	{
+		CHATAUTH = 100,			//
 		NORMAL = 101,			//
 		WHISPER,					//
 		GROUP,					//

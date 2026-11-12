@@ -163,7 +163,7 @@
     <ClInclude Include="RenderObject\COtherPlayer.h" />
     <ClInclude Include="RenderObject\CPlayer.h" />
     <ClInclude Include="RenderObject\CWinObject.h" />
-    <ClInclude Include="Stub\ChatClient.ClientToChatServerStub.g.h" />
+    <ClInclude Include="Stub\ChatClient.ChatServerToClientStub.g.h" />
     <ClInclude Include="Stub\ChatClient.EnumDef.g.h" />
     <ClInclude Include="Stub\ChatClient.PacketEnumDef.g.h" />
     <ClInclude Include="Stub\ChatClient.Serialization.g.h" />
@@ -194,7 +194,7 @@
     <ClCompile Include="RenderObject\COtherPlayer.cpp" />
     <ClCompile Include="RenderObject\CPlayer.cpp" />
     <ClCompile Include="RenderObject\CWinObject.cpp" />
-    <ClCompile Include="Stub\ChatClient.ClientToChatServerStub.g.cpp" />
+    <ClCompile Include="Stub\ChatClient.ChatServerToClientStub.g.cpp" />
     <ClCompile Include="Stub\ChatClient.Serialization.g.cpp" />
     <ClCompile Include="Stub\GameClient.GameServerToClientStub.g.cpp" />
     <ClCompile Include="Stub\GameClient.Serialization.g.cpp" />

@@ -61,10 +61,12 @@ int CSelectObject::Connect(const char IP[16], unsigned short Port)
 	serveraddr.sin_port = htons(Port);
 
 	int retval = connect(m_socket, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
-	if (retval == SOCKET_ERROR && retval != WSAEWOULDBLOCK)
+	if (retval == SOCKET_ERROR)
 	{
 		int error = WSAGetLastError();
-		return error;
+		
+		if(error != WSAEWOULDBLOCK)
+			return error;
 	}
 
 	memcpy(m_strIP, IP, 16);
@@ -89,7 +91,8 @@ int CSelectObject::ChatConnect(const char IP[16], unsigned short Port)
 	if (retval == SOCKET_ERROR)
 	{
 		int error = WSAGetLastError();
-		return error;
+		if (error != WSAEWOULDBLOCK)
+			return error;
 	}
 
 	memcpy(m_strIP, IP, 16);

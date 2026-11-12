@@ -145,6 +145,15 @@ int wmain(int argc, wchar_t* argv[])
         req.token = client.GetUniqueID();
 
         client.SendPacket(req);
+
+        st_CTS_ChatAuth creq;
+        creq.ID.comment = client.GetAccountId();
+        creq.ID.length = req.ID.comment.length();
+        creq.Password.comment = client.GetAccountPassword();
+        creq.Password.length = req.Password.comment.length();
+        creq.token = client.GetUniqueID();
+
+        client.ChatSendPacket(creq);
     }
 
     if (autoAoiTest)
